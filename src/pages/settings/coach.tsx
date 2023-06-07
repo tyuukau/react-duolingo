@@ -1,11 +1,12 @@
 import type { NextPage } from "next";
 import type { ComponentProps } from "react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BottomBar } from "../../components/BottomBar";
 import { LeftBar } from "../../components/LeftBar";
 import { TopBar } from "../../components/TopBar";
 import { useBoundStore } from "../../hooks/useBoundStore";
 import { SettingsRightNav } from "../../components/SettingsRightNav";
+import { useRouter } from "next/router";
 
 const CoachSvg = (props: ComponentProps<"svg">) => {
   return (
@@ -141,6 +142,16 @@ const Coach: NextPage = () => {
   const setGoalXp = useBoundStore((x) => x.setGoalXp);
 
   const [localGoalXp, setLocalGoalXp] = useState(goalXp);
+
+  const router = useRouter();
+  const loggedIn = useBoundStore((x) => x.loggedIn);
+
+  useEffect(() => {
+    if (!loggedIn) {
+      void router.push("/");
+    }
+  }, [loggedIn, router]);
+
   return (
     <div>
       <TopBar />

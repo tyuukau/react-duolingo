@@ -1,6 +1,8 @@
 import type { NextPage } from "next";
 import type { ComponentProps } from "react";
-import React from "react";
+import React, { useEffect } from "react";
+import { useBoundStore } from "../hooks/useBoundStore";
+import { useRouter } from "next/router";
 
 import { BottomBar } from "../components/BottomBar";
 import { LeftBar } from "../components/LeftBar";
@@ -338,6 +340,15 @@ const DuoPlushieSvg = (props: ComponentProps<"svg">) => {
 
 const Shop: NextPage = () => {
   const streakFreezes = 0;
+
+  const router = useRouter();
+  const loggedIn = useBoundStore((x) => x.loggedIn);
+
+  useEffect(() => {
+    if (!loggedIn) {
+      void router.push("/");
+    }
+  }, [loggedIn, router]);
 
   return (
     <div>

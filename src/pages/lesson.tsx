@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   AppleSvg,
   BigCloseSvg,
@@ -58,6 +58,13 @@ const formatTime = (timeMs: number): string => {
 
 const Lesson: NextPage = () => {
   const router = useRouter();
+  const loggedIn = useBoundStore((x) => x.loggedIn);
+
+  useEffect(() => {
+    if (!loggedIn) {
+      void router.push("/");
+    }
+  }, [loggedIn, router]);
 
   const [lessonProblem, setLessonProblem] = useState(0);
   const [correctAnswerCount, setCorrectAnswerCount] = useState(0);

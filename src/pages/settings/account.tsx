@@ -1,10 +1,12 @@
 import type { NextPage } from "next";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BottomBar } from "../../components/BottomBar";
 import { LeftBar } from "../../components/LeftBar";
 import { TopBar } from "../../components/TopBar";
 import { SettingsRightNav } from "../../components/SettingsRightNav";
 import { useBoundStore } from "../../hooks/useBoundStore";
+import { useRouter } from "next/router";
+
 
 const Account: NextPage = () => {
   const name = useBoundStore((x) => x.name);
@@ -19,6 +21,15 @@ const Account: NextPage = () => {
     { title: "Name", value: localName, setValue: setLocalName },
     { title: "Username", value: localUsername, setValue: setLocalUsername },
   ];
+
+  const router = useRouter();
+  const loggedIn = useBoundStore((x) => x.loggedIn);
+
+  useEffect(() => {
+    if (!loggedIn) {
+      void router.push("/");
+    }
+  }, [loggedIn, router]);
 
   return (
     <div>
