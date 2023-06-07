@@ -97,6 +97,16 @@ export const LoginScreen = ({
     void router.push("/learn");
   };
 
+  const logInAndSetUserPropertiesAndRegisterLanguage = () => {
+    const name =
+      nameInputRef.current?.value.trim() || Math.random().toString().slice(2);
+    const username = name.replace(/ +/g, "-");
+    setUsername(username);
+    setName(name);
+    logIn();
+    void router.push("/register");
+  };
+
   return (
     <article
       className={[
@@ -150,14 +160,8 @@ export const LoginScreen = ({
                       ?
                       {ageTooltipShown && (
                         <div className="absolute top-full -right-5 z-10 w-72 rounded-2xl border-2 border-gray-200 bg-white p-4 text-center text-xs leading-5 text-gray-800">
-                          Providing your age ensures you get the right Duolingo
-                          experience. For more details, please visit our{" "}
-                          <Link
-                            href="https://www.duolingo.com/privacy"
-                            className="text-blue-700"
-                          >
-                            Privacy Policy
-                          </Link>
+                          Providing your age ensures you get the right Fluencia
+                          experience. 
                         </div>
                       )}
                     </div>
@@ -198,7 +202,7 @@ export const LoginScreen = ({
           </div>
           <button
             className="rounded-2xl border-b-4 border-blue-500 bg-blue-400 py-3 font-bold uppercase text-white transition hover:brightness-110"
-            onClick={logInAndSetUserProperties}
+            onClick={loginScreenState === "LOGIN" ? logInAndSetUserProperties : logInAndSetUserPropertiesAndRegisterLanguage}
           >
             {loginScreenState === "LOGIN" ? "Log in" : "Create account"}
           </button>
@@ -222,21 +226,7 @@ export const LoginScreen = ({
             </button>
           </div>
           <p className="text-center text-xs leading-5 text-gray-400">
-            By signing in to Duolingo, you agree to our{" "}
-            <Link
-              className="font-bold"
-              href="https://www.duolingo.com/terms?wantsPlainInfo=1"
-            >
-              Terms
-            </Link>{" "}
-            and{" "}
-            <Link
-              className="font-bold"
-              href="https://www.duolingo.com/privacy?wantsPlainInfo=1"
-            >
-              Privacy Policy
-            </Link>
-            .
+            By signing in to Fluencia, you agree to our Terms and Privacy.
           </p>
           <p className="text-center text-xs leading-5 text-gray-400">
             This site is protected by reCAPTCHA Enterprise and the Google{" "}

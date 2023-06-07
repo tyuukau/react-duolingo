@@ -128,6 +128,10 @@ const Lesson: NextPage = () => {
     setCorrectAnswerShown(true);
   };
 
+  const report = () => {
+    console.log("Report");
+  };
+
   const unitNumber = Number(router.query["fast-forward"]);
 
   if (hearts !== null && hearts < 0 && !correctAnswerShown) {
@@ -196,6 +200,7 @@ const Lesson: NextPage = () => {
           onCheckAnswer={onCheckAnswer}
           onFinish={onFinish}
           onSkip={onSkip}
+          report={report}
           hearts={hearts}
         />
       );
@@ -216,6 +221,7 @@ const Lesson: NextPage = () => {
           onCheckAnswer={onCheckAnswer}
           onFinish={onFinish}
           onSkip={onSkip}
+          report={report}
           hearts={hearts}
         />
       );
@@ -345,6 +351,7 @@ const CheckAnswer = ({
   onCheckAnswer,
   onFinish,
   onSkip,
+  report,
 }: {
   isAnswerSelected: boolean;
   isAnswerCorrect: boolean;
@@ -353,6 +360,7 @@ const CheckAnswer = ({
   onCheckAnswer: () => void;
   onFinish: () => void;
   onSkip: () => void;
+  report: () => void;
 }) => {
   return (
     <>
@@ -412,6 +420,15 @@ const CheckAnswer = ({
               </div>
             )}
           </>
+          <div className="mb-2 flex flex-col gap-5 sm:flex-row sm:items-center">
+          <button
+            onClick={report}
+            className={ "w-full rounded-2xl border-2 border-b-4 border-gray-200 bg-white p-3 font-bold uppercase text-gray-400 transition hover:border-gray-300 hover:bg-gray-200 sm:block sm:min-w-[150px] sm:max-w-fit"
+            }
+          >
+            Report
+          </button>
+
           <button
             onClick={onFinish}
             className={
@@ -422,6 +439,7 @@ const CheckAnswer = ({
           >
             Continue
           </button>
+          </div>
         </div>
       </div>
     </>
@@ -441,6 +459,7 @@ const ProblemSelect1Of3 = ({
   onCheckAnswer,
   onFinish,
   onSkip,
+  report,
   hearts,
 }: {
   problem: typeof lessonProblem1;
@@ -455,6 +474,7 @@ const ProblemSelect1Of3 = ({
   onCheckAnswer: () => void;
   onFinish: () => void;
   onSkip: () => void;
+  report: () => void;
   hearts: number | null;
 }) => {
   const { question, answers, correctAnswer } = problem;
@@ -509,6 +529,7 @@ const ProblemSelect1Of3 = ({
         onCheckAnswer={onCheckAnswer}
         onFinish={onFinish}
         onSkip={onSkip}
+        report={report}
       />
 
       <QuitMessage
@@ -532,6 +553,7 @@ const ProblemWriteInEnglish = ({
   onCheckAnswer,
   onFinish,
   onSkip,
+  report,
   hearts,
 }: {
   problem: typeof lessonProblem2;
@@ -546,6 +568,7 @@ const ProblemWriteInEnglish = ({
   onCheckAnswer: () => void;
   onFinish: () => void;
   onSkip: () => void;
+  report: () => void;
   hearts: number | null;
 }) => {
   const { question, correctAnswer, answerTiles } = problem;
@@ -635,6 +658,7 @@ const ProblemWriteInEnglish = ({
         onCheckAnswer={onCheckAnswer}
         onFinish={onFinish}
         onSkip={onSkip}
+        report={report}
       />
 
       <QuitMessage

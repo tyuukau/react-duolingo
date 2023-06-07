@@ -383,21 +383,6 @@ const Shop: NextPage = () => {
               </section>
             </div>
           </div>
-          <div className="py-7">
-            <h2 className="mb-5 text-2xl font-bold">Merch</h2>
-            <div className="flex border-t-2 border-gray-300 py-5">
-              <DuoPlushieSvg className="h-32 w-32 shrink-0 p-4" />
-              <section className="flex flex-col gap-3">
-                <h3 className="text-lg font-bold">Duo Plushie</h3>
-                <p className="text-sm text-gray-500">
-                  {`Celebrate Duolingo's 10 year anniversary with a new exclusive Duo plushie!`}
-                </p>
-                <button className="flex w-fit items-center gap-1 rounded-2xl border-2 border-b-4 border-gray-300 bg-white py-3 px-4 text-sm font-bold uppercase text-red-500">
-                  $29.99
-                </button>
-              </section>
-            </div>
-          </div>
         </div>
         <RightBar />
       </div>

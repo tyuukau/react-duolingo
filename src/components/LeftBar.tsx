@@ -29,6 +29,9 @@ const LeftBarMoreMenuSvg = (props: ComponentProps<"svg">) => {
 export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
   const loggedIn = useBoundStore((x) => x.loggedIn);
   const logOut = useBoundStore((x) => x.logOut);
+  const help = () => {
+    console.log("Help");
+  };
 
   const [moreMenuShown, setMoreMenuShown] = useState(false);
   const [loginScreenState, setLoginScreenState] =
@@ -43,7 +46,7 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
           href="/learn"
           className="ml-5 mb-5 mt-5 hidden text-3xl font-bold text-[#58cc02] lg:block"
         >
-          duolingo
+          fluencia
         </Link>
         <ul className="flex flex-col items-stretch gap-3">
           {bottomBarItems.map((item) => {
@@ -86,26 +89,7 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
               ].join(" ")}
             >
               <div className="flex flex-col py-2">
-                <Link
-                  className="flex items-center gap-4 py-2 px-5 text-left uppercase hover:bg-gray-100"
-                  href="https://schools.duolingo.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <GlobeIconSvg className="h-10 w-10" />
-                  Schools
-                </Link>
-                <Link
-                  className="flex items-center gap-4 py-2 px-5 text-left uppercase hover:bg-gray-100"
-                  href="https://podcast.duolingo.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <PodcastIconSvg className="h-10 w-10" />
-                  Podcast
-                </Link>
-              </div>
-              <div className="flex flex-col border-t-2 border-gray-300 py-2">
+                {/* border-t-2 border-gray-300 */}
                 {!loggedIn && (
                   <button
                     className="py-2 px-5 text-left uppercase hover:bg-gray-100"
@@ -120,12 +104,12 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
                 >
                   Settings
                 </Link>
-                <Link
+                <button
                   className="py-2 px-5 text-left uppercase hover:bg-gray-100"
-                  href="https://support.duolingo.com/hc/en-us"
+                  onClick={help}
                 >
                   Help
-                </Link>
+                </button>
                 {!loggedIn && (
                   <button
                     className="py-2 px-5 text-left uppercase hover:bg-gray-100"
