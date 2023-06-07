@@ -1,12 +1,9 @@
 import { type NextPage } from "next";
-import Link from "next/link";
-import { GlobeSvg } from "../components/Svgs";
-import React from "react";
-import { LanguageHeader } from "../components/LanguageHeader";
-import { useLoginScreen, LoginScreen } from "../components/LoginScreen";
-import _bgSnow from "../../public/bg-snow.svg";
 import type { StaticImageData } from "next/image";
-import { LanguageCarousel } from "../components/LanguageCarousel";
+import _bgSnow from "../../public/bg-snow.svg";
+import { LanguageHeader } from "../components/LanguageHeader";
+import { LoginScreen, useLoginScreen } from "../components/LoginScreen";
+import { GlobeSvg } from "../components/Svgs";
 
 const bgSnow = _bgSnow as StaticImageData;
 
@@ -25,12 +22,6 @@ const Home: NextPage = () => {
             The free, fun, and effective way to learn a language!
           </p>
           <div className="mx-auto mt-4 flex w-fit flex-col items-center gap-3">
-            {/* <Link
-              href="/register"
-              className="w-full rounded-2xl border-b-4 border-green-700 bg-green-600 px-10 py-3 text-center font-bold uppercase transition hover:border-green-600 hover:bg-green-500 md:min-w-[320px]"
-            >
-              Get started
-            </Link> */}
             <button
               className="w-full rounded-2xl border-b-4 border-green-700 bg-green-600 px-10 py-3 text-center font-bold uppercase transition hover:border-green-600 hover:bg-green-500 md:min-w-[320px]"
               onClick={() => setLoginScreenState("SIGNUP")}
@@ -46,7 +37,7 @@ const Home: NextPage = () => {
           </div>
         </div>
       </div>
-      <LanguageCarousel />
+      {/* <LanguageCarousel /> */}
       <LoginScreen
         loginScreenState={loginScreenState}
         setLoginScreenState={setLoginScreenState}
