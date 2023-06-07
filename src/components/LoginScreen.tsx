@@ -53,12 +53,14 @@ export type LoginScreenState = "HIDDEN" | "LOGIN" | "SIGNUP";
 export const useLoginScreen = () => {
   const router = useRouter();
   const loggedIn = useBoundStore((x) => x.loggedIn);
+
   const queryState: LoginScreenState = (() => {
     if (loggedIn) return "HIDDEN";
     if ("login" in router.query) return "LOGIN";
     if ("sign-up" in router.query) return "SIGNUP";
     return "HIDDEN";
   })();
+  
   const [loginScreenState, setLoginScreenState] = useState(queryState);
   useEffect(() => setLoginScreenState(queryState), [queryState]);
   return { loginScreenState, setLoginScreenState };
@@ -145,7 +147,7 @@ export const LoginScreen = ({
                 <div className="relative flex grow">
                   <input
                     className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
-                    placeholder="Age (optional)"
+                    placeholder="Age"
                   />
                   <div className="absolute right-0 top-0 bottom-0 flex items-center justify-center pr-4">
                     <div
@@ -169,7 +171,7 @@ export const LoginScreen = ({
                 </div>
                 <input
                   className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
-                  placeholder="Name (optional)"
+                  placeholder="Name"
                   ref={nameInputRef}
                 />
               </>
@@ -178,14 +180,14 @@ export const LoginScreen = ({
               className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
               placeholder={
                 loginScreenState === "LOGIN"
-                  ? "Email or username (optional)"
-                  : "Email (optional)"
+                  ? "Email or username"
+                  : "Email"
               }
             />
             <div className="relative flex grow">
               <input
                 className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
-                placeholder="Password (optional)"
+                placeholder="Password"
                 type="password"
               />
               {loginScreenState === "LOGIN" && (
