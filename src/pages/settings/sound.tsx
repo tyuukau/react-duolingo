@@ -8,9 +8,6 @@ import { useBoundStore } from "../../hooks/useBoundStore";
 import { useRouter } from "next/router";
 
 const Sound: NextPage = () => {
-  const router = useRouter();
-  const loggedIn = useBoundStore((x) => x.loggedIn);
-
   const soundEffects = useBoundStore((x) => x.soundEffects);
   const setSoundEffects = useBoundStore((x) => x.setSoundEffects);
   const [localSoundEffects, setLocalSoundEffects] = useState(soundEffects);
