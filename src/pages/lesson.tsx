@@ -679,7 +679,7 @@ const LessonComplete = ({
 
   const increaseXp = useBoundStore((x) => x.increaseXp);
   const addToday = useBoundStore((x) => x.addToday);
-  const increaseLingots = useBoundStore((x) => x.increaseLingots);
+  const increaseGems = useBoundStore((x) => x.increaseGems);
   const increaseLessonsCompleted = useBoundStore(
     (x) => x.increaseLessonsCompleted
   );
@@ -731,7 +731,7 @@ const LessonComplete = ({
             onClick={() => {
               increaseXp(correctAnswerCount);
               addToday();
-              increaseLingots(isPractice ? 0 : 1);
+              increaseGems(isPractice ? 0 : 1);
               if (!isPractice) {
                 increaseLessonsCompleted();
               }

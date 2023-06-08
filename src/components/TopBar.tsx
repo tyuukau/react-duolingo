@@ -9,7 +9,7 @@ import {
   FireSvg,
   GemSvg,
   GlobeIconSvg,
-  LingotsTreasureChestSvg,
+  GemsTreasureChestSvg,
   MoreOptionsSvg,
   PodcastIconSvg,
 } from "./Svgs";
@@ -74,7 +74,7 @@ export const TopBar = ({
   const [menu, setMenu] = useState<MenuState>("HIDDEN");
   const [now, setNow] = useState(dayjs());
   const streak = useBoundStore((x) => x.streak);
-  const lingots = useBoundStore((x) => x.lingots);
+  const gems = useBoundStore((x) => x.gems);
   const language = useBoundStore((x) => x.language);
   return (
     <header className="fixed z-20 h-[58px] w-full">
@@ -103,13 +103,13 @@ export const TopBar = ({
         <button
           className="flex items-center gap-2 font-bold"
           onClick={() => setMenu((x) => (x === "GEMS" ? "HIDDEN" : "GEMS"))}
-          aria-label="Toggle lingot menu"
+          aria-label="Toggle gem menu"
         >
-          {lingots > 0 ? <GemSvg /> : <EmptyGemTopBarSvg />}{" "}
+          {gems > 0 ? <GemSvg /> : <EmptyGemTopBarSvg />}{" "}
           <span
-            className={lingots > 0 ? "text-white" : "text-black opacity-20"}
+            className={gems > 0 ? "text-white" : "text-black opacity-20"}
           >
-            {lingots}
+            {gems}
           </span>
         </button>
         {/* <MoreOptionsSvg
@@ -134,7 +134,7 @@ export const TopBar = ({
                   <div className="flex gap-5 p-5">
                     <div className="flex flex-col items-center justify-between gap-2">
                       <div className="rounded-2xl border-4 border-blue-400">
-                        {/* <Flag language={language} width={80} /> */}
+                        <Flag language={language} width={80} />
                       </div>
                       <span className="font-bold">{language.name}</span>
                     </div>
@@ -166,12 +166,12 @@ export const TopBar = ({
               case "GEMS":
                 return (
                   <div className="flex grow items-center gap-3 p-5">
-                    <LingotsTreasureChestSvg className="h-24 w-24" />
+                    <GemsTreasureChestSvg className="h-24 w-24" />
                     <div className="flex flex-col gap-3">
-                      <h2 className="text-xl font-bold text-black">Lingots</h2>
+                      <h2 className="text-xl font-bold text-black">Gems</h2>
                       <p className="text-sm font-normal text-gray-400">
-                        You have {lingots}{" "}
-                        {lingots === 1 ? "lingot" : "lingots"}.
+                        You have {gems}{" "}
+                        {gems === 1 ? "gem" : "gems"}.
                       </p>
                       <Link
                         className="font-bold uppercase text-blue-400 transition hover:brightness-110"

@@ -382,7 +382,7 @@ const Shop: NextPage = () => {
               <section className="flex flex-col gap-3">
                 <h3 className="text-lg font-bold">Double or Nothing</h3>
                 <p className="text-sm text-gray-500">
-                  Attempt to double your five lingot wager by maintaining a
+                  Attempt to double your five gem wager by maintaining a
                   seven day streak.
                 </p>
                 <button

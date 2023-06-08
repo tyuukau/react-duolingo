@@ -2468,7 +2468,7 @@ export const GemSvg = () => {
         fillRule="evenodd"
       >
         <g
-          id="lingot"
+          id="gem"
           transform="translate(1.000000, 1.000000)"
           fillRule="nonzero"
         >
@@ -2491,7 +2491,7 @@ export const GemSvg = () => {
   );
 };
 
-export const LingotsTreasureChestSvg = (props: ComponentProps<"svg">) => {
+export const GemsTreasureChestSvg = (props: ComponentProps<"svg">) => {
   return (
     <svg width="124" height="124" viewBox="0 0 124 124" {...props}>
       <title>lingot_chest</title>

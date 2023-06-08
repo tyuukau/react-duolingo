@@ -9,7 +9,7 @@ import {
   FireSvg,
   GemSvg,
   LightningProgressSvg,
-  LingotsTreasureChestSvg,
+  GemsTreasureChestSvg,
   TreasureProgressSvg,
 } from "./Svgs";
 import { Calendar } from "./Calendar";
@@ -21,7 +21,7 @@ import { useLeaderboardRank } from "../hooks/useLeaderboard";
 
 export const RightBar = () => {
   const loggedIn = useBoundStore((x) => x.loggedIn);
-  const lingots = useBoundStore((x) => x.lingots);
+  const gems = useBoundStore((x) => x.gems);
   const streak = useBoundStore((x) => x.streak);
   const language = useBoundStore((x) => x.language);
   const learningLanguages = useBoundStore((x) => x.learningLanguages);
@@ -130,9 +130,9 @@ export const RightBar = () => {
             role="button"
             tabIndex={0}
           >
-            {lingots > 0 ? <GemSvg /> : <EmptyGemSvg />}
-            <span className={lingots > 0 ? "text-red-500" : "text-gray-300"}>
-              {lingots}
+            {gems > 0 ? <GemSvg /> : <EmptyGemSvg />}
+            <span className={gems > 0 ? "text-red-500" : "text-gray-300"}>
+              {gems}
             </span>
             <div
               className="absolute top-full z-10 flex w-72 items-center gap-3 rounded-2xl border-2 border-gray-300 bg-white p-5"
@@ -141,11 +141,11 @@ export const RightBar = () => {
                 display: gemsShown ? "flex" : "none",
               }}
             >
-              <LingotsTreasureChestSvg className="w-24" />
+              <GemsTreasureChestSvg className="w-24" />
               <div className="flex flex-col gap-3">
-                <h2 className="text-xl font-bold text-black">Lingots</h2>
+                <h2 className="text-xl font-bold text-black">Gems</h2>
                 <p className="text-sm font-normal text-gray-400">
-                  You have {lingots} {lingots === 1 ? "lingot" : "lingots"}.
+                  You have {gems} {gems === 1 ? "gem" : "gems"}.
                 </p>
                 <Link
                   className="uppercase text-blue-400 transition hover:brightness-110"

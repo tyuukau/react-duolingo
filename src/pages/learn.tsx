@@ -327,7 +327,7 @@ const UnitSection = ({ unit }: { unit: Unit }): JSX.Element => {
   const increaseLessonsCompleted = useBoundStore(
     (x) => x.increaseLessonsCompleted
   );
-  const increaseLingots = useBoundStore((x) => x.increaseLingots);
+  const increaseGems = useBoundStore((x) => x.increaseGems);
 
   return (
     <>
@@ -423,7 +423,7 @@ const UnitSection = ({ unit }: { unit: Unit }): JSX.Element => {
                         onClick={() => {
                           if (status === "ACTIVE") {
                             increaseLessonsCompleted(4);
-                            increaseLingots(1);
+                            increaseGems(1);
                           }
                         }}
                         role="button"
