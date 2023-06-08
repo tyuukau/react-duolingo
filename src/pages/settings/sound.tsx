@@ -7,15 +7,25 @@ import { SettingsRightNav } from "../../components/SettingsRightNav";
 import { useBoundStore } from "../../hooks/useBoundStore";
 import { useRouter } from "next/router";
 
+// import useSound from 'use-sound';
+// import boopSfx from '../../../public/sounds/effects.mp3';
+
 const Sound: NextPage = () => {
+  // const soundUrl = "/sounds/effects.mp3";
+
+  // const [playSoundEffect] = useSound(soundUrl, {
+  //   sprite: {
+  //     success: [7177, 1550],
+  //     fail: [8859, 1605],
+  //   },
+  //   onend: () => {
+  //     console.info('Sound ended!');
+  //   },
+  // });
+
   const soundEffects = useBoundStore((x) => x.soundEffects);
   const setSoundEffects = useBoundStore((x) => x.setSoundEffects);
   const [localSoundEffects, setLocalSoundEffects] = useState(soundEffects);
-
-  const speakingExercises = useBoundStore((x) => x.speakingExercises);
-  const setSpeakingExercises = useBoundStore((x) => x.setSpeakingExercises);
-  const [localSpeakingExercises, setLocalSpeakingExercises] =
-    useState(speakingExercises);
 
   const listeningExercises = useBoundStore((x) => x.listeningExercises);
   const setListeningExercises = useBoundStore((x) => x.setListeningExercises);
@@ -27,11 +37,6 @@ const Sound: NextPage = () => {
       title: "Sound effects",
       value: localSoundEffects,
       setValue: setLocalSoundEffects,
-    },
-    {
-      title: "Speaking exercises",
-      value: localSpeakingExercises,
-      setValue: setLocalSpeakingExercises,
     },
     {
       title: "Listening exercises",
@@ -60,17 +65,16 @@ const Sound: NextPage = () => {
           <button
             className="rounded-2xl border-b-4 border-green-600 bg-green-500 py-3 px-5 font-bold uppercase text-white transition hover:brightness-110 disabled:border-b-0 disabled:bg-gray-200 disabled:text-gray-400 disabled:hover:brightness-100"
             onClick={() => {
+              // playSoundEffect({id: "success"});
               setSoundEffects(localSoundEffects);
-              setSpeakingExercises(localSpeakingExercises);
               setListeningExercises(localListeningExercises);
             }}
             disabled={
               localSoundEffects === soundEffects &&
-              localSpeakingExercises === speakingExercises &&
               localListeningExercises === listeningExercises
             }
           >
-            Save changes
+             Save changes
           </button>
         </div>
         <div className="flex justify-center gap-12">
