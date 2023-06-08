@@ -86,11 +86,14 @@ const ProfileTopSection = () => {
           </div>
           <div className="flex items-center gap-3">
             <ProfileFriendsSvg />
-            <span className="text-gray-500">{`${followingCount} Following / ${followersCount} Followers`}</span>
+            <span className="text-gray-500">{`${followingCount} Following / ${followersCount} Followers ${language}`}</span>
           </div>
+          {/* <div className="flex items-center gap-3">
+            <span className="text-gray-500">{language}</span>
+          </div> */}
         </div>
 
-        <Flag language={language} width={40} />
+        {/* <Flag language={language} width={40} /> */}
       </div>
       <Link
         href="/settings/account"

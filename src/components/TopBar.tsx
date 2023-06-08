@@ -86,7 +86,7 @@ export const TopBar = ({
             setMenu((x) => (x === "LANGUAGES" ? "HIDDEN" : "LANGUAGES"))
           }
         >
-          <Flag language={language} width={45} />
+          {/* <Flag language={language} width={45} /> */}
           <span className="sr-only">See languages</span>
         </button>
 
@@ -134,7 +134,7 @@ export const TopBar = ({
                   <div className="flex gap-5 p-5">
                     <div className="flex flex-col items-center justify-between gap-2">
                       <div className="rounded-2xl border-4 border-blue-400">
-                        <Flag language={language} width={80} />
+                        {/* <Flag language={language} width={80} /> */}
                       </div>
                       <span className="font-bold">{language.name}</span>
                     </div>

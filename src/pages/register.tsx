@@ -11,6 +11,15 @@ const bgSnow = _bgSnow as StaticImageData;
 
 const Register: NextPage = () => {
   const setLanguage = useBoundStore((x) => x.setLanguage);
+  const numberOfLanguages = useBoundStore((x) => x.numberOfLanguages);
+  const learningLanguages = useBoundStore((x) => x.learningLanguages);
+
+  const setNewLanguage = (language) => {
+    setLanguage(language);
+    console.log(numberOfLanguages);
+    console.log(JSON.stringify(learningLanguages));
+  };
+
   return (
     <main
       className="flex min-h-screen flex-col items-center bg-[#235390] text-white"
@@ -27,11 +36,11 @@ const Register: NextPage = () => {
               key={language.name}
               href="/learn"
               className={
-                "flex cursor-pointer flex-col items-center gap-4 rounded-2xl border-2 border-b-4 border-gray-400 py-8 px-5 text-xl font-bold hover:bg-gray-300 hover:bg-opacity-20"
+                "flex cursor-pointer flex-col items-center gap-4 rounded-2xl border-2 border-b-4 border-gray-400 px-5 py-8 text-xl font-bold hover:bg-gray-300 hover:bg-opacity-20"
               }
-              onClick={() => setLanguage(language)}
+              onClick={() => setNewLanguage(language)}
             >
-              <Flag language={language} />
+              {/* <Flag language={language} /> */}
               <span>{language.name}</span>
             </Link>
           ))}

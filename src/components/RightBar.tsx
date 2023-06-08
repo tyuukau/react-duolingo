@@ -48,7 +48,7 @@ export const RightBar = () => {
             role="button"
             tabIndex={0}
           >
-            <Flag language={language} width={45} />
+            {/* <Flag language={language} width={45} /> */}
             <div>{language.name}</div>
             <div
               className="absolute top-full z-10 rounded-2xl border-2 border-gray-300 bg-white"
@@ -62,7 +62,7 @@ export const RightBar = () => {
                 My courses
               </h2>
               <button className="flex w-full items-center gap-3 border-t-2 border-gray-300 bg-blue-100 py-3 px-5 text-left font-bold">
-                <Flag language={language} width={45} />
+                {/* <Flag language={language} width={45} /> */}
                 <span className="text-blue-500">{language.name}</span>
               </button>
               <Link
