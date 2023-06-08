@@ -41,6 +41,7 @@ const formatTime = (timeMs: number): string => {
 const Lesson: NextPage = () => {
   const router = useRouter();
   const loggedIn = useBoundStore((x) => x.loggedIn);
+  const soundEffects = useBoundStore((x) => x.soundEffects);
 
   useEffect(() => {
     if (!loggedIn) {
@@ -85,10 +86,14 @@ const Lesson: NextPage = () => {
   const onCheckAnswer = () => {
     setCorrectAnswerShown(true);
     if (isAnswerCorrect) {
-      playSuccessSound();
+      if (soundEffects) {
+        playSuccessSound();
+      }
       setCorrectAnswerCount((x) => x + 1);
     } else {
-      playFailSound();
+      if (soundEffects) {
+        playFailSound();
+      }
       setIncorrectAnswerCount((x) => x + 1);
     }
     setQuestionResults((questionResults) => [
