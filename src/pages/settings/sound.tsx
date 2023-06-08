@@ -7,22 +7,7 @@ import { SettingsRightNav } from "../../components/SettingsRightNav";
 import { useBoundStore } from "../../hooks/useBoundStore";
 import { useRouter } from "next/router";
 
-// import useSound from 'use-sound';
-// import boopSfx from '../../../public/sounds/effects.mp3';
-
 const Sound: NextPage = () => {
-  // const soundUrl = "/sounds/effects.mp3";
-
-  // const [playSoundEffect] = useSound(soundUrl, {
-  //   sprite: {
-  //     success: [7177, 1550],
-  //     fail: [8859, 1605],
-  //   },
-  //   onend: () => {
-  //     console.info('Sound ended!');
-  //   },
-  // });
-
   const soundEffects = useBoundStore((x) => x.soundEffects);
   const setSoundEffects = useBoundStore((x) => x.setSoundEffects);
   const [localSoundEffects, setLocalSoundEffects] = useState(soundEffects);
