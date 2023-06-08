@@ -1,5 +1,8 @@
 import type { StateCreator } from "zustand";
 import { create } from "zustand";
+import zukeeper from "zukeeper";
+import { mountStoreDevtool } from 'simple-zustand-devtools';
+
 import type { GoalXpSlice } from "../stores/createGoalXpStore";
 import { createGoalXpSlice } from "../stores/createGoalXpStore";
 import type { LanguageSlice } from "../stores/createLanguageStore";
@@ -43,3 +46,11 @@ export const useBoundStore = create<BoundState>((...args) => ({
   ...createUserSlice(...args),
   ...createXpSlice(...args),
 }));
+
+if (process.env.NODE_ENV === 'development') {
+  mountStoreDevtool('Store', useBoundStore);
+}
+
+// window.store = useBoundStore;
+
+// export default useBoundStore;

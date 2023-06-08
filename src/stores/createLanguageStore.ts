@@ -4,8 +4,8 @@ import type { BoundStateCreator } from "../hooks/useBoundStore";
 export type LanguageSlice = {
   language: Language;
   learningLanguages: Language[];
-  numberOfLanguages: number;
-  setLanguage: (newLanguage: Language) => void;
+  addLanguage: (newLanguage: Language) => void;
+  setLanguage: (language: Language) => void;
 };
 
 const spanishLanguageIndex = 6;
@@ -13,11 +13,15 @@ const spanishLanguageIndex = 6;
 export const createLanguageSlice: BoundStateCreator<LanguageSlice> = (set) => ({
   language: languages[spanishLanguageIndex],
   learningLanguages: [],
-  numberOfLanguages: 0,
-  setLanguage: (newLanguage: Language) =>
-    set(state => ({
-      language: newLanguage,
-      numberOfLanguages: state.numberOfLanguages + 1,
-      learningLanguages: [newLanguage, ...state.learningLanguages],
-    })),
+  addLanguage: (newLanguage: Language) =>
+  set((state) => {
+    if (!state.learningLanguages.includes(newLanguage)) {
+      return {
+        language: newLanguage,
+        learningLanguages: [newLanguage, ...state.learningLanguages],
+      };
+    }
+    return state;
+  }),
+  setLanguage: (language: Language) => set(() => ({ language: language })),
 });

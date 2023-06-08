@@ -18,26 +18,7 @@ import {
 import womanPng from "../../public/woman.png";
 import { useBoundStore } from "../hooks/useBoundStore";
 import { useRouter } from "next/router";
-
-const lessonProblem1 = {
-  type: "SELECT_1_OF_3",
-  question: `Which one of these is "the apple"?`,
-  answers: [
-    { icon: <AppleSvg />, name: "la manzana" },
-    { icon: <BoySvg />, name: "el niño" },
-    { icon: <WomanSvg />, name: "la mujer" },
-  ],
-  correctAnswer: 0,
-} as const;
-
-const lessonProblem2 = {
-  type: "WRITE_IN_ENGLISH",
-  question: "El niño",
-  answerTiles: ["woman", "milk", "water", "I", "The", "boy"],
-  correctAnswer: [4, 5],
-} as const;
-
-const lessonProblems = [lessonProblem1, lessonProblem2];
+import { fakeLessonProblems } from "../utils/fakeLessons";
 
 const numbersEqual = (a: readonly number[], b: readonly number[]): boolean => {
   return a.length === b.length && a.every((_, i) => a[i] === b[i]);
@@ -81,7 +62,7 @@ const Lesson: NextPage = () => {
   const [questionResults, setQuestionResults] = useState<QuestionResult[]>([]);
   const [reviewLessonShown, setReviewLessonShown] = useState(false);
 
-  const problem = lessonProblems[lessonProblem] ?? lessonProblem1;
+  const problem = fakeLessonProblems[lessonProblem] ?? fakeLessonProblems[0];
 
   const totalCorrectAnswersNeeded = 2;
 
@@ -126,7 +107,7 @@ const Lesson: NextPage = () => {
     setSelectedAnswer(null);
     setSelectedAnswers([]);
     setCorrectAnswerShown(false);
-    setLessonProblem((x) => (x + 1) % lessonProblems.length);
+    setLessonProblem((x) => (x + 1) % fakeLessonProblems.length);
     endTime.current = Date.now();
   };
 
