@@ -1,10 +1,4 @@
-export type Language = /* `(typeof languages)[number];` is defining a type called `Language` which is a
-union of all the types of the objects in the `languages` array. The `typeof`
-operator is used to get the type of the `languages` array, and the `[number]`
-index signature is used to get the type of the elements in the array. This
-ensures that the `Language` type is always up-to-date with the contents of
-the `languages` array. */
-(typeof languages)[number];
+export type Language = (typeof languages)[number];
 
 const languages = [
   {

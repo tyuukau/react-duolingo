@@ -2,10 +2,14 @@ import { units } from "../utils/units";
 import type { BoundStateCreator } from "../hooks/useBoundStore";
 import { Language } from "~/utils/languages";
 
+type CourseData = {
+  lessonsCompleted: number;
+}
+
 export type CourseDataSlice = {
   language: Language;
   lessonsCompleted: number;
-  courseData: string;
+  coursesData: Record<Language, CourseData>;
   increaseLessonsCompleted: (by?: number) => void;
   jumpToUnit: (unitNumber: number) => void;
 };

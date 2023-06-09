@@ -10,11 +10,11 @@ import type { StaticImageData } from "next/image";
 const bgSnow = _bgSnow as StaticImageData;
 
 const Register: NextPage = () => {
-  const setLanguage = useBoundStore((x) => x.addLanguage);
+  const setCurrentLanguage = useBoundStore((x) => x.addLanguage);
   const learningLanguages = useBoundStore((x) => x.learningLanguages);
 
   const setNewLanguage = (language) => {
-    setLanguage(language);
+    setCurrentLanguage(language);
   };
 
   return (

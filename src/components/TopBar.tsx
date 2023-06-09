@@ -77,7 +77,7 @@ export const TopBar = ({
   const gems = useBoundStore((x) => x.gems);
   const language = useBoundStore((x) => x.currentLanguage);
   const learningLanguages = useBoundStore((x) => x.learningLanguages);
-  const setLanguage = useBoundStore((x) => x.setCurrentLanguage);
+  const setCurrentLanguage = useBoundStore((x) => x.setCurrentLanguage);
 
   return (
     <header className="fixed z-20 h-[58px] w-full">
@@ -140,7 +140,7 @@ export const TopBar = ({
                     {learningLanguages.map((language) => (
                       <button
                         className="flex w-full items-center gap-3 px-5 py-3 text-left font-bold hover:bg-gray-100 text-gray-400"
-                        onClick={() => {setLanguage(language); setMenu("HIDDEN")}}
+                        onClick={() => {setCurrentLanguage(language); setMenu("HIDDEN")}}
                         key={language.code}
                       >
                         <span>{language.name}</span>
