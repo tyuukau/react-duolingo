@@ -100,7 +100,7 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
                 )}
                 <Link
                   className="py-2 px-5 text-left uppercase hover:bg-gray-100"
-                  href={loggedIn ? "/settings/account" : "/settings/sound"}
+                  href={loggedIn ? "/settings" : "/"}
                 >
                   Settings
                 </Link>
