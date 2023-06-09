@@ -24,18 +24,9 @@ export const units: readonly Unit[] = [
     textColor: "text-[#58cc02]",
     borderColor: "border-[#46a302]",
     tiles: [
-      {
-        type: "star",
-        description: "Form basic sentences",
-      },
-      {
-        type: "book",
-        description: "Good morning",
-      },
-      {
-        type: "star",
-        description: "Greet people",
-      },
+      { type: "star", description: "Form basic sentences" },
+      { type: "book", description: "Good morning" },
+      { type: "star", description: "Greet people" },
       { type: "treasure" },
       { type: "book", description: "A date" },
       { type: "trophy", description: "Unit 1 review" },

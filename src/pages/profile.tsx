@@ -18,26 +18,6 @@ import { useBoundStore } from "../hooks/useBoundStore";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-const Profile: NextPage = () => {
-  return (
-    <div>
-      <ProfileTopBar />
-      <LeftBar selectedTab="Profile" />
-      <div className="flex justify-center gap-3 pt-14 md:ml-24 lg:ml-64 lg:gap-12">
-        <div className="flex w-full max-w-4xl flex-col gap-5 p-5">
-          <ProfileTopSection />
-          <ProfileStatsSection />
-          <ProfileFriendsSection />
-        </div>
-      </div>
-      <div className="pt-[90px]"></div>
-      <BottomBar selectedTab="Profile" />
-    </div>
-  );
-};
-
-export default Profile;
-
 const ProfileTopBar = () => {
   return (
     <div className="fixed left-0 right-0 top-0 flex h-16 items-center justify-between border-b-2 border-gray-200 bg-white px-5 text-xl font-bold text-gray-300 md:hidden">
@@ -208,3 +188,23 @@ const ProfileFriendsSection = () => {
     </section>
   );
 };
+
+const Profile: NextPage = () => {
+  return (
+    <div>
+      <ProfileTopBar />
+      <LeftBar selectedTab="Profile" />
+      <div className="flex justify-center gap-3 pt-14 md:ml-24 lg:ml-64 lg:gap-12">
+        <div className="flex w-full max-w-4xl flex-col gap-5 p-5">
+          <ProfileTopSection />
+          <ProfileStatsSection />
+          <ProfileFriendsSection />
+        </div>
+      </div>
+      <div className="pt-[90px]"></div>
+      <BottomBar selectedTab="Profile" />
+    </div>
+  );
+};
+
+export default Profile;

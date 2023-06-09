@@ -4,21 +4,7 @@ import type { ComponentProps } from "react";
 import React, { useState } from "react";
 import type { LoginScreenState } from "../components/LoginScreen";
 import { LoginScreen } from "../components/LoginScreen";
-
-const MenuIconSvg = (props: ComponentProps<"svg">) => {
-  return (
-    <svg width="40" height="40" viewBox="0 0 40 40" {...props}>
-      <title>Artboard</title>
-      <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-        <g transform="translate(5 10)" fill="#FFF" fillRule="nonzero">
-          <rect x="0" y="16" width="30" height="4" rx="2" />
-          <rect x="0" y="8" width="30" height="4" rx="2" />
-          <rect x="0" y="0" width="30" height="4" rx="2" />
-        </g>
-      </g>
-    </svg>
-  );
-};
+import { MenuIconSvg } from "~/components/Svgs";
 
 const ForgotPassword: NextPage = () => {
   const [loginScreenState, setLoginScreenState] =

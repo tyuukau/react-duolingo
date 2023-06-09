@@ -7,24 +7,7 @@ import type { LoginScreenState } from "./LoginScreen";
 import { LoginScreen } from "./LoginScreen";
 import { GlobeIconSvg, PodcastIconSvg } from "./Svgs";
 import { useBoundStore } from "../hooks/useBoundStore";
-
-const LeftBarMoreMenuSvg = (props: ComponentProps<"svg">) => {
-  return (
-    <svg width="46" height="46" viewBox="0 0 46 46" fill="none" {...props}>
-      <circle
-        cx="23"
-        cy="23"
-        r="19"
-        fill="#CE82FF"
-        stroke="#CE82FF"
-        strokeWidth="2"
-      />
-      <circle cx="15" cy="23" r="2" fill="white" />
-      <circle cx="23" cy="23" r="2" fill="white" />
-      <circle cx="31" cy="23" r="2" fill="white" />
-    </svg>
-  );
-};
+import { LeftBarMoreMenuSvg } from "./Svgs";
 
 export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
   const loggedIn = useBoundStore((x) => x.loggedIn);
