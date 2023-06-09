@@ -18,12 +18,12 @@ import { useBoundStore } from "../hooks/useBoundStore";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-const ProfileTopBar = () => {
+export const ProfileTopBar = () => {
   return (
     <div className="fixed left-0 right-0 top-0 flex h-16 items-center justify-between border-b-2 border-gray-200 bg-white px-5 text-xl font-bold text-gray-300 md:hidden">
-      <div className="invisible" aria-hidden={true}>
-        <SettingsGearSvg />
-      </div>
+      <Link href="/help">
+        <span>Help</span>
+      </Link>
       <span className="text-gray-400">Profile</span>
       <Link href="/settings">
         <SettingsGearSvg />
@@ -66,22 +66,31 @@ const ProfileTopSection = () => {
           </div>
           <div className="flex items-center gap-3">
             <ProfileFriendsSvg />
-            <span className="text-gray-500">{`${followingCount} Following / ${followersCount} Followers ${language}`}</span>
+            <span className="text-gray-500">{`${followingCount} Following / ${followersCount} Followers`}</span>
           </div>
-          {/* <div className="flex items-center gap-3">
-            <span className="text-gray-500">{language}</span>
-          </div> */}
+          <div className="flex items-center gap-3">
+            <span className="text-gray-500">{language.name}</span>
+          </div>
         </div>
 
         {/* <Flag language={language} width={40} /> */}
       </div>
-      <Link
-        href="/settings"
-        className="hidden items-center gap-2 self-start rounded-2xl border-b-4 border-blue-500 bg-blue-400 px-5 py-3 font-bold uppercase text-white transition hover:brightness-110 md:flex"
-      >
-        <EditPencilSvg />
-        Edit profile
-      </Link>
+      <div className="flex-col space-y-4">
+        <Link
+          href="/settings"
+          className="hidden items-center gap-2 self-start rounded-2xl border-b-4 border-blue-500 bg-blue-400 px-5 py-3 font-bold uppercase text-white transition hover:brightness-110 md:flex"
+        >
+          <EditPencilSvg />
+          Settings
+        </Link>
+        <Link
+          href="/help"
+          className="hidden items-center gap-2 self-start rounded-2xl border-b-4 border-gray-500 bg-gray-400 px-5 py-3 font-bold uppercase text-white transition hover:brightness-110 md:flex"
+        >
+          {/* <EditPencilSvg /> */}
+          Help
+        </Link>
+      </div>
     </section>
   );
 };
@@ -94,7 +103,7 @@ const ProfileStatsSection = () => {
 
   return (
     <section>
-      <h2 className="mb-5 text-2xl font-bold">Statistics</h2>
+      <h2 className="mb-5 text-xl font-bold">Statistics</h2>
       <div className="grid grid-cols-2 gap-3">
         <div className="flex gap-2 rounded-2xl border-2 border-gray-200 p-2 md:gap-3 md:px-6 md:py-4">
           {streak === 0 ? <EmptyFireSvg /> : <FireSvg />}
@@ -153,7 +162,7 @@ const ProfileFriendsSection = () => {
   const [state, setState] = useState<"FOLLOWING" | "FOLLOWERS">("FOLLOWING");
   return (
     <section>
-      <h2 className="mb-5 text-2xl font-bold">Friends</h2>
+      <h2 className="mb-5 text-xl font-bold">Friends</h2>
       <div className="rounded-2xl border-2 border-gray-200">
         <div className="flex">
           <button
@@ -190,15 +199,30 @@ const ProfileFriendsSection = () => {
 };
 
 const Profile: NextPage = () => {
+  const logOut = useBoundStore((x) => x.logOut);
   return (
     <div>
       <ProfileTopBar />
-      <LeftBar selectedTab="Profile" />
-      <div className="flex justify-center gap-3 pt-14 md:ml-24 lg:ml-64 lg:gap-12">
-        <div className="flex w-full max-w-4xl flex-col gap-5 p-5">
+      <LeftBar selectedTab="Profile" /> 
+      {/* gap-3 lg:gap-12 pt-14 sm:pt-10 sm:p-6 md:ml-24 lg:ml-64 */}
+      <div className="flex justify-center gap-3 pt-14 sm:p-6 sm:pt-10 md:ml-24 lg:ml-64 lg:gap-12">
+        <div className="flex w-full max-w-4xl flex-col gap-5 py-7 px-4">
+          <h1 className="mb-5 text-2xl font-bold">Profile</h1>
           <ProfileTopSection />
           <ProfileStatsSection />
           <ProfileFriendsSection />
+          <section>
+            <div className="flex w-full flex-col gap-5">
+              <button
+                className="gap-2 rounded-2xl border-b-4 border-red-600 bg-red-500 px-5 py-3 font-bold uppercase text-white transition disabled:border-b-0 disabled:bg-gray-200 disabled:text-gray-400 disabled:hover:brightness-100"
+                onClick={() => {
+                  logOut();
+                }}
+              >
+                Sign out
+              </button>
+            </div>
+          </section>
         </div>
       </div>
       <div className="pt-[90px]"></div>

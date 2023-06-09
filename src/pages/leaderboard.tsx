@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import React, { useEffect } from "react";
 import { LeftBar } from "../components/LeftBar";
+import { TopBar } from "~/components/TopBar";
 import { BottomBar } from "../components/BottomBar";
 import { useBoundStore } from "../hooks/useBoundStore";
 import Link from "next/link";
@@ -138,9 +139,10 @@ const Leaderboard: NextPage = () => {
   return (
     <div>
       <LeftBar selectedTab="Leaderboards" />
-      
+      <TopBar />
+
       <div className="flex justify-center gap-3 pt-14 md:ml-24 md:p-6 md:pt-10 lg:ml-64 lg:gap-12">
-        <div className="flex w-full max-w-xl flex-col items-center gap-5 pb-28 md:px-5">
+        <div className="flex w-full max-w-xl flex-col items-center gap-5 pb-28 px-4 md:px-5">
           {!leaderboardIsUnlocked && (
             <>
               <LeaderboardBannerSvg />

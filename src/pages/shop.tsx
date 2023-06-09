@@ -28,11 +28,11 @@ const Shop: NextPage = () => {
       <TopBar />
       <LeftBar selectedTab="Shop" />
 
-      <div className="flex justify-center gap-3 pt-14 sm:p-6 sm:pt-10 md:ml-24 lg:ml-64 lg:gap-12">
+      <div className="flex justify-center gap-3 lg:gap-12 pt-14 sm:pt-10 sm:p-6 md:ml-24 lg:ml-64">
         <div className="px-4 pb-20">
           <div className="py-7">
-            <h2 className="mb-5 text-2xl font-bold">Power-ups</h2>
-            <div className="flex border-t-2 border-gray-300 py-5">
+            <h1 className="mb-5 text-2xl font-bold">Power-ups</h1>
+            <div className="flex border-t-2 border-gray-200 py-5">
               <StreakFreezeSvg className="shrink-0" />
               <section className="flex flex-col gap-3">
                 <h3 className="text-lg font-bold">Streak Freeze</h3>
@@ -51,7 +51,7 @@ const Shop: NextPage = () => {
                 </button>
               </section>
             </div>
-            <div className="flex border-t-2 border-gray-300 py-5">
+            <div className="flex border-t-2 border-b-2 border-gray-200 py-5">
               <DoubleOrNothingSvg className="shrink-0" />
               <section className="flex flex-col gap-3">
                 <h3 className="text-lg font-bold">Double or Nothing</h3>

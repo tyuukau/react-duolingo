@@ -19,7 +19,7 @@ import womanPng from "../../public/woman.png";
 import { useBoundStore } from "../hooks/useBoundStore";
 import { useRouter } from "next/router";
 import { fakeLessonProblems } from "../utils/fakeLessons";
-import { playSound } from "../components/sound";
+import { playSound } from "../components/Sound";
 
 const numbersEqual = (a: readonly number[], b: readonly number[]): boolean => {
   return a.length === b.length && a.every((_, i) => a[i] === b[i]);

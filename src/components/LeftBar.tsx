@@ -55,7 +55,7 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
               </li>
             );
           })}
-          <div
+          {/* <div
             className="relative flex grow cursor-default items-center gap-3 rounded-xl py-1 px-2 font-bold uppercase text-gray-400 hover:bg-gray-100"
             onClick={() => setMoreMenuShown((x) => !x)}
             onMouseEnter={() => setMoreMenuShown(true)}
@@ -72,7 +72,6 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
               ].join(" ")}
             >
               <div className="flex flex-col py-2">
-                {/* border-t-2 border-gray-300 */}
                 {!loggedIn && (
                   <button
                     className="py-2 px-5 text-left uppercase hover:bg-gray-100"
@@ -93,25 +92,9 @@ export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
                 >
                   Help
                 </button>
-                {!loggedIn && (
-                  <button
-                    className="py-2 px-5 text-left uppercase hover:bg-gray-100"
-                    onClick={() => setLoginScreenState("LOGIN")}
-                  >
-                    Sign in
-                  </button>
-                )}
-                {loggedIn && (
-                  <button
-                    className="py-2 px-5 text-left uppercase hover:bg-gray-100"
-                    onClick={logOut}
-                  >
-                    Sign out
-                  </button>
-                )}
               </div>
             </div>
-          </div>
+          </div> */}
         </ul>
       </nav>
       <LoginScreen
