@@ -1,11 +1,17 @@
 import { type NextPage } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { BottomBar } from "../components/BottomBar";
+import { LeftBar } from "../components/LeftBar";
+import { LoginScreen, useLoginScreen } from "../components/LoginScreen";
+import { RightBar } from "../components/RightBar";
 import {
   ActiveBookSvg,
-  LockedBookSvg,
+  ActiveDumbbellSvg,
+  ActiveTreasureSvg,
+  ActiveTrophySvg,
   CheckmarkSvg,
-  LockedDumbbellSvg,
   FastForwardSvg,
   GoldenBookSvg,
   GoldenDumbbellSvg,
@@ -17,21 +23,15 @@ import {
   LessonCompletionSvg2,
   LessonCompletionSvg3,
   LockSvg,
-  StarSvg,
+  LockedBookSvg,
+  LockedDumbbellSvg,
   LockedTreasureSvg,
   LockedTrophySvg,
-  UpArrowSvg,
-  ActiveTreasureSvg,
-  ActiveTrophySvg,
-  ActiveDumbbellSvg,
   PracticeExerciseSvg,
+  StarSvg,
+  UpArrowSvg,
 } from "../components/Svgs";
 import { TopBar } from "../components/TopBar";
-import { BottomBar } from "../components/BottomBar";
-import { RightBar } from "../components/RightBar";
-import { LeftBar } from "../components/LeftBar";
-import { useRouter } from "next/router";
-import { LoginScreen, useLoginScreen } from "../components/LoginScreen";
 import { useBoundStore } from "../hooks/useBoundStore";
 import type { Tile, TileType, Unit } from "../utils/units";
 import { units } from "../utils/units";
@@ -312,22 +312,23 @@ const UnitSection = ({ unit }: { unit: Unit }): JSX.Element => {
 
   const [selectedTile, setSelectedTile] = useState<null | number>(null);
 
+  const closeTooltip = useCallback(() => setSelectedTile(null), []);
+
+  const language = useBoundStore((x) => x.currentLanguage);
+  const lessonsCompleted = useBoundStore((x) => x.coursesData[language.code]?.lessonsCompleted || 0);
+  const increaseLessonsCompleted = useBoundStore((x) => x.increaseLessonsCompleted);
+
+  const increaseGems = useBoundStore((x) => x.increaseGems);
+
   useEffect(() => {
     if (!loggedIn) {
       void router.push("/");
     }
+    
     const unselectTile = () => setSelectedTile(null);
     window.addEventListener("scroll", unselectTile);
     return () => window.removeEventListener("scroll", unselectTile);
   }, [loggedIn, router]);
-
-  const closeTooltip = useCallback(() => setSelectedTile(null), []);
-
-  const lessonsCompleted = useBoundStore((x) => x.lessonsCompleted);
-  const increaseLessonsCompleted = useBoundStore(
-    (x) => x.increaseLessonsCompleted
-  );
-  const increaseGems = useBoundStore((x) => x.increaseGems);
 
   return (
     <>
@@ -422,7 +423,7 @@ const UnitSection = ({ unit }: { unit: Unit }): JSX.Element => {
                         ].join(" ")}
                         onClick={() => {
                           if (status === "ACTIVE") {
-                            increaseLessonsCompleted(4);
+                            increaseLessonsCompleted(language, 4);
                             increaseGems(1);
                           }
                         }}

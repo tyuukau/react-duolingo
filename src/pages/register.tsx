@@ -10,11 +10,13 @@ import type { StaticImageData } from "next/image";
 const bgSnow = _bgSnow as StaticImageData;
 
 const Register: NextPage = () => {
-  const setCurrentLanguage = useBoundStore((x) => x.addLanguage);
+  const addLanguage = useBoundStore((x) => x.addLanguage);
   const learningLanguages = useBoundStore((x) => x.learningLanguages);
+  const initialiseCourseDataRecord = useBoundStore((x) => x.initialiseCourseDataRecord);
 
-  const setNewLanguage = (language) => {
-    setCurrentLanguage(language);
+  const addNewLanguage = (language) => {
+    addLanguage(language);
+    initialiseCourseDataRecord(language);
   };
 
   return (
@@ -35,7 +37,7 @@ const Register: NextPage = () => {
               className={
                 "flex cursor-pointer flex-col items-center gap-4 rounded-2xl border-2 border-b-4 border-gray-400 px-5 py-8 text-xl font-bold hover:bg-gray-300 hover:bg-opacity-20"
               }
-              onClick={() => setNewLanguage(language)}
+              onClick={() => addNewLanguage(language)}
             >
               {/* <Flag language={language} /> */}
               <span>{language.name}</span>
