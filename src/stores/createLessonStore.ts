@@ -1,13 +1,16 @@
 import { units } from "../utils/units";
 import type { BoundStateCreator } from "../hooks/useBoundStore";
+import { Language } from "~/utils/languages";
 
-export type LessonSlice = {
+export type CourseDataSlice = {
+  language: Language;
   lessonsCompleted: number;
+  courseData: string;
   increaseLessonsCompleted: (by?: number) => void;
   jumpToUnit: (unitNumber: number) => void;
 };
 
-export const createLessonSlice: BoundStateCreator<LessonSlice> = (set) => ({
+export const CourseDataSlice: BoundStateCreator<CourseDataSlice> = (set) => ({
   lessonsCompleted: 0,
   increaseLessonsCompleted: (by = 1) =>
     set(({ lessonsCompleted }) => ({

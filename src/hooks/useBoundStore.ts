@@ -5,8 +5,8 @@ import { mountStoreDevtool } from 'simple-zustand-devtools';
 
 import type { LanguageSlice } from "../stores/createLanguageStore";
 import { createLanguageSlice } from "../stores/createLanguageStore";
-import type { LessonSlice } from "../stores/createLessonStore";
-import { createLessonSlice } from "../stores/createLessonStore";
+import type { CourseDataSlice } from "../stores/createLessonStore";
+import { CourseDataSlice } from "../stores/createLessonStore";
 import type { StreakSlice } from "../stores/createStreakStore";
 import { createStreakSlice } from "../stores/createStreakStore";
 import type { UserSlice } from "../stores/createUserStore";
@@ -15,7 +15,7 @@ import type { XpSlice } from "../stores/createXpStore";
 import { createXpSlice } from "../stores/createXpStore";
 
 type BoundState = LanguageSlice &
-  LessonSlice &
+  CourseDataSlice &
   StreakSlice &
   UserSlice &
   XpSlice;
@@ -29,7 +29,7 @@ export type BoundStateCreator<SliceState> = StateCreator<
 
 export const useBoundStore = create<BoundState>((...args) => ({
   ...createLanguageSlice(...args),
-  ...createLessonSlice(...args),
+  ...CourseDataSlice(...args),
   ...createStreakSlice(...args),
   ...createUserSlice(...args),
   ...createXpSlice(...args),
