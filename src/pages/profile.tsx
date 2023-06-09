@@ -61,7 +61,7 @@ const ProfileTopSection = () => {
   const joinedAt = useBoundStore((x) => x.joinedAt).format("MMMM YYYY");
   const followingCount = 0;
   const followersCount = 0;
-  const language = useBoundStore((x) => x.language);
+  const language = useBoundStore((x) => x.currentLanguage);
 
   useEffect(() => {
     if (!loggedIn) {

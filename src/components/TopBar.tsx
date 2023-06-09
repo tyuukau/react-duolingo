@@ -75,9 +75,9 @@ export const TopBar = ({
   const [now, setNow] = useState(dayjs());
   const streak = useBoundStore((x) => x.streak);
   const gems = useBoundStore((x) => x.gems);
-  const language = useBoundStore((x) => x.language);
+  const language = useBoundStore((x) => x.currentLanguage);
   const learningLanguages = useBoundStore((x) => x.learningLanguages);
-  const setLanguage = useBoundStore((x) => x.setLanguage);
+  const setLanguage = useBoundStore((x) => x.setCurrentLanguage);
 
   return (
     <header className="fixed z-20 h-[58px] w-full">

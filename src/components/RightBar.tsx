@@ -23,9 +23,9 @@ export const RightBar = () => {
   const loggedIn = useBoundStore((x) => x.loggedIn);
   const gems = useBoundStore((x) => x.gems);
   const streak = useBoundStore((x) => x.streak);
-  const language = useBoundStore((x) => x.language);
+  const language = useBoundStore((x) => x.currentLanguage);
   const learningLanguages = useBoundStore((x) => x.learningLanguages);
-  const setLanguage = useBoundStore((x) => x.setLanguage);
+  const setCurrentLanguage = useBoundStore((x) => x.setCurrentLanguage);
   const lessonsCompleted = useBoundStore((x) => x.lessonsCompleted);
 
   const [languagesShown, setLanguagesShown] = useState(false);
@@ -66,7 +66,7 @@ export const RightBar = () => {
               {learningLanguages.map((language) => (
                 <button
                   className="flex w-full items-center gap-3 border-t-2 border-gray-300 px-5 py-3 text-left font-bold hover:bg-gray-100"
-                  onClick={() => setLanguage(language)}
+                  onClick={() => setCurrentLanguage(language)}
                   key={language.code}
                 >
                   <span>{language.name}</span>
