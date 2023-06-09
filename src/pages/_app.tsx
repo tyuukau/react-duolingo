@@ -12,7 +12,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           name="description"
           content="Fluencia"
         />
-        <link rel="icon" href="/public/favicon.ico" />
+        <link rel="icon" href="../../public/favicon.ico" />
       </Head>
       <Component {...pageProps} />
     </>

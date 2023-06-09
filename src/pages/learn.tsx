@@ -603,7 +603,7 @@ const Learn: NextPage = () => {
   const topBarColors = getTopBarColors(scrollY);
 
   return (
-    <>
+    <div>
       <TopBar
         backgroundColor={topBarColors.backgroundColor}
         borderColor={topBarColors.borderColor}
@@ -644,7 +644,7 @@ const Learn: NextPage = () => {
         loginScreenState={loginScreenState}
         setLoginScreenState={setLoginScreenState}
       />
-    </>
+    </div>
   );
 };
 
