@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import type { StaticImageData } from "next/image";
 import _bgSnow from "../../public/bg-snow.svg";
-import { LanguageHeader } from "../components/LanguageHeader";
+import { FluenciaHeader } from "../components/LanguageHeader";
 import { LoginScreen, useLoginScreen } from "../components/LoginScreen";
 import { GlobeSvg } from "../components/Svgs";
 
@@ -14,7 +14,7 @@ const Home: NextPage = () => {
       className="flex min-h-screen flex-col items-center justify-center bg-[#235390] text-white"
       style={{ backgroundImage: `url(${bgSnow.src})` }}
     >
-      <LanguageHeader />
+      <FluenciaHeader />
       <div className="flex w-full flex-col items-center justify-center gap-3 px-4 py-16 md:flex-row md:gap-36">
         <GlobeSvg className="h-fit w-7/12 md:w-[360px]" />
         <div>

@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Link from "next/link";
 import languages from "../utils/languages";
-import { LanguageHeader } from "../components/LanguageHeader";
+import { FluenciaHeader } from "../components/LanguageHeader";
 import { useBoundStore } from "../hooks/useBoundStore";
 import { Flag } from "../components/Flag";
 import _bgSnow from "../../public/bg-snow.svg";
@@ -24,7 +24,7 @@ const Register: NextPage = () => {
       className="flex min-h-screen flex-col items-center bg-[#235390] text-white"
       style={{ backgroundImage: `url(${bgSnow.src})` }}
     >
-      <LanguageHeader />
+      <FluenciaHeader />
       <div className="container flex grow flex-col items-center justify-center gap-20 px-4 py-16">
         <h1 className="mt-20 text-center text-3xl font-extrabold tracking-tight text-white">
           I want to learn...
