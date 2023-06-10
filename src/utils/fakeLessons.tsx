@@ -7,21 +7,35 @@ import { AppleSvg,
   WomanSvg } from "~/components/Svgs";
 
 const lessonProblem1 = {
-  type: "SELECT_1_OF_3",
+  formType: "MULTIPLE_CHOICES",
+  contentType: "TRANSLATION",
   question: `Which one of these is "the apple"?`,
   answers: [
-    { icon: <AppleSvg />, name: "la manzana" },
-    { icon: <BoySvg />, name: "el niño" },
-    { icon: <WomanSvg />, name: "la mujer" },
+    { icon: <AppleSvg />, name: "der Apfel" },
+    { icon: <BoySvg />, name: "der Junge" },
+    { icon: <WomanSvg />, name: "die Frau" },
   ],
   correctAnswer: 0,
 } as const;
 
 const lessonProblem2 = {
-  type: "WRITE_IN_ENGLISH",
-  question: "El niño",
+  formType: "ANSWER_SHUFFLES",
+  contentType: "TRANSLATION",
+  question: "Der Junge",
   answerTiles: ["woman", "milk", "water", "I", "The", "boy"],
   correctAnswer: [4, 5],
 } as const;
 
-export const fakeLessonProblems = [lessonProblem1, lessonProblem2];
+const lessonProblem3 = {
+  formType: "MULTIPLE_CHOICES",
+  contentType: "TRANSLATION_FILL",
+  question: `Der Junge isst ____________`,
+  answers: [
+    { icon: <AppleSvg />, name: "einen Apfel" },
+    { icon: <BoySvg />, name: "einen Junge" },
+    { icon: <WomanSvg />, name: "eine Frau" },
+  ],
+  correctAnswer: 0,
+} as const;
+
+export const fakeLessonProblems = [lessonProblem1, lessonProblem2, lessonProblem3];

@@ -214,7 +214,7 @@ const Profile: NextPage = () => {
           <section>
             <div className="flex w-full flex-col gap-5">
               <button
-                className="gap-2 rounded-2xl border-b-4 border-red-600 bg-red-500 px-5 py-3 font-bold uppercase text-white transition disabled:border-b-0 disabled:bg-gray-200 disabled:text-gray-400 disabled:hover:brightness-100"
+                className="gap-2 rounded-2xl border-b-4 border-red-600 bg-red-500 mt-5 px-5 py-3 font-bold uppercase text-white transition disabled:border-b-0 disabled:bg-gray-200 disabled:text-gray-400 disabled:hover:brightness-100"
                 onClick={() => {
                   logOut();
                 }}

@@ -254,7 +254,7 @@ const CheckAnswer = ({
   );
 };
 
-const ProblemSelect1Of3 = ({
+const ProblemMultipleChoices = ({
   problem,
   correctAnswerCount,
   totalCorrectAnswersNeeded,
@@ -348,7 +348,7 @@ const ProblemSelect1Of3 = ({
   );
 };
 
-const ProblemWriteInEnglish = ({
+const ProblemAnswerShuffles = ({
   problem,
   correctAnswerCount,
   totalCorrectAnswersNeeded,
@@ -797,7 +797,7 @@ const LessonFastForwardEndPass = ({
           >
             Continue
           </Link>
-        </div> 
+        </div>
       </section>
       <ReviewLesson
         reviewLessonShown={reviewLessonShown}
@@ -836,7 +836,7 @@ const Lesson: NextPage = () => {
 
   const problem = fakeLessonProblems[lessonProblem] ?? fakeLessonProblems[0];
 
-  const totalCorrectAnswersNeeded = 2;
+  const totalCorrectAnswersNeeded = 3;
 
   const [isStartingLesson, setIsStartingLesson] = useState(true);
   const hearts =
@@ -871,11 +871,11 @@ const Lesson: NextPage = () => {
       {
         question: problem.question,
         yourResponse:
-          problem.type === "SELECT_1_OF_3"
+          problem.formType === "MULTIPLE_CHOICES"
             ? problem.answers[selectedAnswer ?? 0]?.name ?? ""
             : selectedAnswers.map((i) => problem.answerTiles[i]).join(" "),
         correctResponse:
-          problem.type === "SELECT_1_OF_3"
+          problem.formType === "MULTIPLE_CHOICES"
             ? problem.answers[problem.correctAnswer].name
             : problem.correctAnswer
                 .map((i) => problem.answerTiles[i])
@@ -888,6 +888,7 @@ const Lesson: NextPage = () => {
     setSelectedAnswer(null);
     setSelectedAnswers([]);
     setCorrectAnswerShown(false);
+    console.log(fakeLessonProblems.length);
     setLessonProblem((x) => (x + 1) % fakeLessonProblems.length);
     endTime.current = Date.now();
   };
@@ -953,10 +954,10 @@ const Lesson: NextPage = () => {
     );
   }
 
-  switch (problem.type) {
-    case "SELECT_1_OF_3": {
+  switch (problem.formType) {
+    case "MULTIPLE_CHOICES": {
       return (
-        <ProblemSelect1Of3
+        <ProblemMultipleChoices
           problem={problem}
           correctAnswerCount={correctAnswerCount}
           totalCorrectAnswersNeeded={totalCorrectAnswersNeeded}
@@ -975,9 +976,9 @@ const Lesson: NextPage = () => {
       );
     }
 
-    case "WRITE_IN_ENGLISH": {
+    case "ANSWER_SHUFFLES": {
       return (
-        <ProblemWriteInEnglish
+        <ProblemAnswerShuffles
           problem={problem}
           correctAnswerCount={correctAnswerCount}
           totalCorrectAnswersNeeded={totalCorrectAnswersNeeded}
