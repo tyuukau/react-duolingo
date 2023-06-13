@@ -12,13 +12,13 @@ import {
   GemsTreasureChestSvg,
   TreasureProgressSvg,
   TreasureClosedSvg,
-} from "./Svgs";
-import { Calendar } from "./Calendar";
-import { useBoundStore } from "../hooks/useBoundStore";
-import { Flag } from "./Flag";
-import type { LoginScreenState } from "./LoginScreen";
-import { LoginScreen } from "./LoginScreen";
-import { useLeaderboardRank } from "../hooks/useLeaderboard";
+} from "../Svgs";
+import { Calendar } from "../Calendar";
+import { useBoundStore } from "../../hooks/useBoundStore";
+import { Flag } from "../Flag";
+import type { LoginScreenState } from "../screens/LoginScreen";
+import { LoginScreen } from "../screens/LoginScreen";
+import { useLeaderboardRank } from "../../hooks/useLeaderboard";
 
 export const RightBar = () => {
   const loggedIn = useBoundStore((x) => x.loggedIn);

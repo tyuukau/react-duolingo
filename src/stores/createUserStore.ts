@@ -13,12 +13,15 @@ export type GoalXp = 1 | 10 | 20 | 30 | 50;
 export type UserSlice = {
   // General
   name: string;
-  username: string;
+  email: string;
+  age: number;
+
   joinedAt: dayjs.Dayjs;
   loggedIn: boolean;
 
   setName: (name: string) => void;
-  setUsername: (username: string) => void;
+  setEmail: (email: string) => void;
+  setAge: (age: number) => void;
   
   logIn: () => void;
   logOut: () => void;
@@ -43,12 +46,15 @@ export type UserSlice = {
 
 export const createUserSlice: BoundStateCreator<UserSlice> = (set) => ({
   name: "",
-  username: "",
+  email: "",
+  age: 0,
+
   joinedAt: dayjs(),
   loggedIn: false,
 
   setName: (name: string) => set(() => ({ name })),
-  setUsername: (username: string) => set(() => ({ username })),
+  setEmail: (email: string) => set(() => ({ email: email })),
+  setAge: (age: number) => set(() => ({ age: age })),
 
   logIn: () => set(() => ({ loggedIn: true })),
   logOut: () => set(() => ({ loggedIn: false })),

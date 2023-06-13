@@ -15,7 +15,7 @@ const lessonProblem1 = {
     { icon: <BoySvg />, name: "der Junge" },
     { icon: <WomanSvg />, name: "die Frau" },
   ],
-  correctAnswer: 0,
+  correctAnswer: ["der Apfel"],
 } as const;
 
 const lessonProblem2 = {
@@ -23,19 +23,26 @@ const lessonProblem2 = {
   contentType: "TRANSLATION",
   question: "Der Junge",
   answerTiles: ["woman", "milk", "water", "I", "The", "boy"],
-  correctAnswer: [4, 5],
+  correctAnswer: ["The boy"],
 } as const;
 
 const lessonProblem3 = {
   formType: "MULTIPLE_CHOICES",
-  contentType: "TRANSLATION_FILL",
-  question: `Der Junge isst ____________`,
+  contentType: "FILL_IN",
+  question: "Der Junge isst ____________",
   answers: [
     { icon: <AppleSvg />, name: "einen Apfel" },
     { icon: <BoySvg />, name: "einen Junge" },
     { icon: <WomanSvg />, name: "eine Frau" },
   ],
-  correctAnswer: 0,
+  correctAnswer: ["einen Apfel"],
 } as const;
 
-export const fakeLessonProblems = [lessonProblem1, lessonProblem2, lessonProblem3];
+const lessonProblem4 = {
+  formType: "SHORT_ANSWER",
+  contentType: "FILL_IN",
+  question: "Wir essen gerne ____________ (Plural of Apfel)",
+  correctAnswer: ["Äpfel"],
+}
+
+export const fakeLessonProblems = [lessonProblem1, lessonProblem2, lessonProblem3, lessonProblem4];

@@ -163,7 +163,7 @@ const CheckAnswer = ({
   isAnswerSelected: boolean;
   isAnswerCorrect: boolean;
   correctAnswerShown: boolean;
-  correctAnswer: string;
+  correctAnswer: string[];
   onCheckAnswer: () => void;
   onFinish: () => void;
   onSkip: () => void;
@@ -222,7 +222,7 @@ const CheckAnswer = ({
                 </div>
                 <div className="flex flex-col gap-2">
                   <div className="text-2xl">Correct solution:</div>{" "}
-                  <div className="text-sm font-normal">{correctAnswer}</div>
+                  <div className="text-sm font-normal">{correctAnswer[0]}</div>
                 </div>
               </div>
             )}
@@ -330,7 +330,7 @@ const ProblemMultipleChoices = ({
       </div>
 
       <CheckAnswer
-        correctAnswer={answers[correctAnswer].name}
+        correctAnswer={correctAnswer}
         correctAnswerShown={correctAnswerShown}
         isAnswerCorrect={isAnswerCorrect}
         isAnswerSelected={selectedAnswer !== null}
@@ -459,10 +459,104 @@ const ProblemAnswerShuffles = ({
       </div>
 
       <CheckAnswer
-        correctAnswer={correctAnswer.map((i) => answerTiles[i]).join(" ")}
+        correctAnswer={correctAnswer}
         correctAnswerShown={correctAnswerShown}
         isAnswerCorrect={isAnswerCorrect}
         isAnswerSelected={selectedAnswers.length > 0}
+        onCheckAnswer={onCheckAnswer}
+        onFinish={onFinish}
+        onSkip={onSkip}
+        report={report}
+      />
+
+      <QuitMessage
+        quitMessageShown={quitMessageShown}
+        setQuitMessageShown={setQuitMessageShown}
+      />
+    </div>
+  );
+};
+
+const ProblemShortAnswer = ({
+  problem,
+  correctAnswerCount,
+  totalCorrectAnswersNeeded,
+  writtenAnswer,
+  setWrittenAnswer,
+  quitMessageShown,
+  correctAnswerShown,
+  setQuitMessageShown,
+  isAnswerCorrect,
+  onCheckAnswer,
+  onFinish,
+  onSkip,
+  report,
+  hearts,
+}: {
+  problem: typeof lessonProblem4;
+  correctAnswerCount: number;
+  totalCorrectAnswersNeeded: number;
+  writtenAnswer: string;
+  setWrittenAnswer: React.Dispatch<React.SetStateAction<string>>;
+  correctAnswerShown: boolean;
+  quitMessageShown: boolean;
+  setQuitMessageShown: React.Dispatch<React.SetStateAction<boolean>>;
+  isAnswerCorrect: boolean;
+  onCheckAnswer: () => void;
+  onFinish: () => void;
+  onSkip: () => void;
+  report: () => void;
+  hearts: number | null;
+}) => {
+  const { question, correctAnswer } = problem;
+
+  return (
+    <div className="flex min-h-screen flex-col gap-5 px-4 py-5 sm:px-0 sm:py-0">
+      <div className="flex grow flex-col items-center gap-5">
+        <div className="w-full max-w-5xl sm:mt-8 sm:px-5">
+          <ProgressBar
+            correctAnswerCount={correctAnswerCount}
+            totalCorrectAnswersNeeded={totalCorrectAnswersNeeded}
+            setQuitMessageShown={setQuitMessageShown}
+            hearts={hearts}
+          />
+        </div>
+        <section className="flex max-w-2xl grow flex-col gap-5 self-center sm:items-center sm:justify-center sm:gap-24">
+          <h1 className="mb-2 text-2xl font-bold sm:text-3xl">
+            Fill in the blank
+          </h1>
+
+          <div className="w-full">
+            <div className="flex items-center gap-2 px-2">
+              <Image src={womanPng} alt="" width={92} height={115} />
+              <div className="relative ml-2 w-fit rounded-2xl border-2 border-gray-200 p-4">
+                {question}
+                <div
+                  className="absolute h-4 w-4 rotate-45 border-b-2 border-l-2 border-gray-200 bg-white"
+                  style={{
+                    top: "calc(50% - 8px)",
+                    left: "-10px",
+                  }}
+                ></div>
+              </div>
+            </div>
+
+            <div className="flex min-h-[60px] flex-wrap gap-1 border-b-2 border-t-2 border-gray-200 py-1">
+              <input
+                className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
+                placeholder="Write your answer"
+                onChange={(e) => setWrittenAnswer(e.target.value)}
+              />
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <CheckAnswer
+        correctAnswer={correctAnswer}
+        correctAnswerShown={correctAnswerShown}
+        isAnswerCorrect={isAnswerCorrect}
+        isAnswerSelected={writtenAnswer !== null && writtenAnswer !== ""}
         onCheckAnswer={onCheckAnswer}
         onFinish={onFinish}
         onSkip={onSkip}
@@ -574,7 +668,7 @@ const LessonComplete = ({
 type QuestionResult = {
   question: string;
   yourResponse: string;
-  correctResponse: string;
+  correctResponse: string[];
 };
 
 const ReviewLesson = ({
@@ -621,7 +715,9 @@ const ReviewLesson = ({
                 key={i}
                 className={[
                   "relative flex flex-col items-stretch gap-3 rounded-xl p-5 text-left",
-                  questionResult.yourResponse === questionResult.correctResponse
+                  questionResult.correctResponse.includes(
+                    questionResult.yourResponse
+                  )
                     ? "bg-yellow-100 text-yellow-600"
                     : "bg-red-100 text-red-500",
                 ].join(" ")}
@@ -636,8 +732,9 @@ const ReviewLesson = ({
                 <div className="flex justify-between gap-2">
                   <h3 className="font-bold">{questionResult.question}</h3>
                   <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white">
-                    {questionResult.yourResponse ===
-                    questionResult.correctResponse ? (
+                    {questionResult.correctResponse.includes(
+                      questionResult.yourResponse
+                    ) ? (
                       <DoneSvg className="h-5 w-5" />
                     ) : (
                       <BigCloseSvg className="h-5 w-5" />
@@ -661,7 +758,7 @@ const ReviewLesson = ({
                       Correct response:
                     </div>
                     <div className="text-gray-700">
-                      {questionResult.correctResponse}
+                      {questionResult.correctResponse[0]}
                     </div>
                   </div>
                 )}
@@ -822,11 +919,13 @@ const Lesson: NextPage = () => {
   const [lessonProblem, setLessonProblem] = useState(0);
   const [correctAnswerCount, setCorrectAnswerCount] = useState(0);
   const [incorrectAnswerCount, setIncorrectAnswerCount] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<null | number>(null);
+
   const [correctAnswerShown, setCorrectAnswerShown] = useState(false);
   const [quitMessageShown, setQuitMessageShown] = useState(false);
 
+  const [selectedAnswer, setSelectedAnswer] = useState<null | number>(null);
   const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
+  const [writtenAnswer, setWrittenAnswer] = useState("");
 
   const startTime = useRef(Date.now());
   const endTime = useRef(startTime.current + 1000 * 60 * 3 + 1000 * 33);
@@ -845,10 +944,17 @@ const Lesson: NextPage = () => {
       ? 3 - incorrectAnswerCount
       : null;
 
+  console.log("hearts", hearts);
+
   const { correctAnswer } = problem;
-  const isAnswerCorrect = Array.isArray(correctAnswer)
-    ? numbersEqual(selectedAnswers, correctAnswer)
-    : selectedAnswer === correctAnswer;
+  const isAnswerCorrect =
+    problem.formType === "MULTIPLE_CHOICES"
+      ? correctAnswer.includes(problem.answers[selectedAnswer ?? 0]?.name ?? "")
+      : problem.formType === "ANSWER_SHUFFLES"
+      ? correctAnswer.includes(
+          selectedAnswers.map((i) => problem.answerTiles[i]).join(" ")
+        )
+      : correctAnswer.includes(writtenAnswer);
 
   const playSuccessSound = playSound("success");
   const playFailSound = playSound("fail");
@@ -874,12 +980,7 @@ const Lesson: NextPage = () => {
           problem.formType === "MULTIPLE_CHOICES"
             ? problem.answers[selectedAnswer ?? 0]?.name ?? ""
             : selectedAnswers.map((i) => problem.answerTiles[i]).join(" "),
-        correctResponse:
-          problem.formType === "MULTIPLE_CHOICES"
-            ? problem.answers[problem.correctAnswer].name
-            : problem.correctAnswer
-                .map((i) => problem.answerTiles[i])
-                .join(" "),
+        correctResponse: problem.correctAnswer,
       },
     ]);
   };
@@ -984,6 +1085,27 @@ const Lesson: NextPage = () => {
           totalCorrectAnswersNeeded={totalCorrectAnswersNeeded}
           selectedAnswers={selectedAnswers}
           setSelectedAnswers={setSelectedAnswers}
+          quitMessageShown={quitMessageShown}
+          correctAnswerShown={correctAnswerShown}
+          setQuitMessageShown={setQuitMessageShown}
+          isAnswerCorrect={isAnswerCorrect}
+          onCheckAnswer={onCheckAnswer}
+          onFinish={onFinish}
+          onSkip={onSkip}
+          report={report}
+          hearts={hearts}
+        />
+      );
+    }
+
+    case "SHORT_ANSWER": {
+      return (
+        <ProblemShortAnswer
+          problem={problem}
+          correctAnswerCount={correctAnswerCount}
+          totalCorrectAnswersNeeded={totalCorrectAnswersNeeded}
+          writtenAnswer={writtenAnswer}
+          setWrittenAnswer={setWrittenAnswer}
           quitMessageShown={quitMessageShown}
           correctAnswerShown={correctAnswerShown}
           setQuitMessageShown={setQuitMessageShown}

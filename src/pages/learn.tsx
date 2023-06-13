@@ -2,10 +2,10 @@ import { type NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import { BottomBar } from "../components/BottomBar";
-import { LeftBar } from "../components/LeftBar";
-import { LoginScreen, useLoginScreen } from "../components/LoginScreen";
-import { RightBar } from "../components/RightBar";
+import { BottomBar } from "../components/navigation/BottomBar";
+import { LeftBar } from "../components/navigation/LeftBar";
+import { LoginScreen, useLoginScreen } from "../components/screens/LoginScreen";
+import { RightBar } from "../components/navigation/RightBar";
 import {
   ActiveBookSvg,
   ActiveDumbbellSvg,
@@ -31,7 +31,7 @@ import {
   StarSvg,
   UpArrowSvg,
 } from "../components/Svgs";
-import { TopBar } from "../components/TopBar";
+import { TopBar } from "../components/navigation/TopBar";
 import { useBoundStore } from "../hooks/useBoundStore";
 import type { Tile, TileType, Unit } from "../utils/units";
 import { units } from "../utils/units";
@@ -591,7 +591,6 @@ const UnitHeader = ({
 };
 
 const Learn: NextPage = () => {
-  const { loginScreenState, setLoginScreenState } = useLoginScreen();
 
   const [scrollY, setScrollY] = useState(0);
   useEffect(() => {
@@ -641,10 +640,6 @@ const Learn: NextPage = () => {
       <div className="pt-[90px]"></div>
 
       <BottomBar selectedTab="Learn" />
-      <LoginScreen
-        loginScreenState={loginScreenState}
-        setLoginScreenState={setLoginScreenState}
-      />
     </div>
   );
 };

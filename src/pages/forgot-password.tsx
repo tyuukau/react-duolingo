@@ -2,8 +2,8 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import type { ComponentProps } from "react";
 import React, { useState } from "react";
-import type { LoginScreenState } from "../components/LoginScreen";
-import { LoginScreen } from "../components/LoginScreen";
+import type { LoginScreenState } from "../components/screens/LoginScreen";
+import { LoginScreen } from "../components/screens/LoginScreen";
 import { MenuIconSvg } from "~/components/Svgs";
 
 const ForgotPassword: NextPage = () => {
@@ -31,13 +31,14 @@ const ForgotPassword: NextPage = () => {
               Get started
             </Link>
           </div>
-          <div
+          {/* <div
             className="relative flex md:hidden"
             onClick={() => setMobileMenuShown((x) => !x)}
             role="button"
             tabIndex={0}
           >
             <MenuIconSvg aria-hidden="true" />
+            Go Back
             {mobileMenuShown && (
               <div className="absolute top-full right-0 rounded-2xl border-2 border-gray-300 bg-white font-bold text-gray-700">
                 <Link
@@ -52,12 +53,9 @@ const ForgotPassword: NextPage = () => {
                 >
                   Get started
                 </Link>
-                <div className="min-w-max cursor-pointer rounded-b-2xl border-t-2 border-gray-300 px-5 py-2 hover:bg-gray-100">
-                  Site language: English
-                </div>
               </div>
             )}
-          </div>
+          </div> */}
         </div>
       </header>
       <div className="flex w-full grow flex-col items-center gap-5 px-5 pt-5 sm:w-96 sm:pt-52">

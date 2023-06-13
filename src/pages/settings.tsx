@@ -1,33 +1,34 @@
 import type { NextPage } from "next";
 import React, { useState, useEffect } from "react";
 import type { ComponentProps } from "react";
-import { BottomBar } from "../components/BottomBar";
-import { LeftBar } from "../components/LeftBar";
-import { TopBar } from "../components/TopBar";
+import Link from "next/link";
+import { BottomBar } from "../components/navigation/BottomBar";
+import { LeftBar } from "../components/navigation/LeftBar";
+import { TopBar } from "../components/navigation/TopBar";
 import { useBoundStore } from "../hooks/useBoundStore";
 import { useRouter } from "next/router";
 import { CoachSvg } from "~/components/Svgs";
-
-const goalXpOptions = [
-  { title: "Basic", xp: 1 },
-  { title: "Casual", xp: 10 },
-  { title: "Regular", xp: 20 },
-  { title: "Serious", xp: 30 },
-  { title: "Intense", xp: 50 },
-] as const;
 
 const Settings: NextPage = () => {
   const name = useBoundStore((x) => x.name);
   const setName = useBoundStore((x) => x.setName);
   const [localName, setLocalName] = useState(name);
 
-  const username = useBoundStore((x) => x.username);
-  const setUsername = useBoundStore((x) => x.setUsername);
-  const [localUsername, setLocalUsername] = useState(username);
+  const email = useBoundStore((x) => x.email);
+  const setEmail = useBoundStore((x) => x.setEmail);
+  const [localEmail, setLocalEmail] = useState(email);
 
   const accountOptions = [
     { title: "Name", value: localName, setValue: setLocalName },
-    { title: "Username", value: localUsername, setValue: setLocalUsername },
+    { title: "Email", value: localEmail, setValue: setLocalEmail },
+  ];
+
+  const goalXpOptions = [
+    { title: "Basic", xp: 1 },
+    { title: "Casual", xp: 10 },
+    { title: "Regular", xp: 20 },
+    { title: "Serious", xp: 30 },
+    { title: "Intense", xp: 50 },
   ];
 
   const soundEffects = useBoundStore((x) => x.soundEffects);
@@ -73,9 +74,21 @@ const Settings: NextPage = () => {
       <LeftBar selectedTab="Profile" />
       <div className="flex justify-center gap-3 pt-14 sm:p-6 sm:pt-10 md:ml-24 lg:ml-64 lg:gap-12">
         <div className="flex w-full max-w-4xl flex-col gap-5 px-4 py-7">
-          <h1 class="mb-5 text-2xl font-bold">Settings</h1>
+          <section>
+            <div className="flex flex-row justify-between">
+              <h1 className="mb-5 text-2xl font-bold">Settings</h1>
+              <div className="flex flex-row space-x-4">
+                <Link
+                  href="/profile"
+                  className="items-center gap-2 self-start rounded-2xl border-b-4 border-blue-500 bg-blue-400 px-5 py-3 font-bold uppercase text-white transition hover:brightness-110 md:flex"
+                >
+                  Back
+                </Link>
+              </div>
+            </div>
+          </section>
           <div className="mb-5 flex justify-center gap-6">
-            <div className="flex w-full max-w-xl flex-col gap-6">
+            <div className="flex w-full max-w-4xl flex-col gap-6">
               <h2 className="text-xl font-bold text-gray-800">Account</h2>
               {accountOptions.map(({ title, value, setValue }) => {
                 return (
@@ -95,7 +108,7 @@ const Settings: NextPage = () => {
             </div>
           </div>
           <div className="mb-5 flex justify-center gap-6">
-            <div className="flex w-full max-w-xl flex-col gap-6">
+            <div className="flex w-full max-w-4xl flex-col gap-6">
               <h2 className="text-xl font-bold text-gray-800">Sound</h2>
               {soundOptions.map(({ title, value, setValue }) => {
                 return (
@@ -135,7 +148,7 @@ const Settings: NextPage = () => {
             </div>
           </div>
           <div className="mb-5 flex justify-center gap-6">
-            <div className="flex w-full max-w-xl flex-col gap-6">
+            <div className="flex w-full max-w-4xl flex-col gap-6">
               <h2 className="text-xl font-bold text-gray-800">Daily Goal</h2>
               <p className="text-gray-400">
                 Coach here! Selecting a daily goal will help you stay motivated
@@ -171,19 +184,19 @@ const Settings: NextPage = () => {
           <section>
             <div className="flex justify-center">
               {" "}
-              <div className="flex w-full max-w-xl flex-col gap-6">
+              <div className="flex w-full max-w-4xl flex-col gap-6">
                 <button
                   className="w-full gap-2 rounded-2xl border-b-4 border-green-600 bg-green-500 px-5 py-3 font-bold uppercase text-white transition disabled:border-b-0 disabled:bg-gray-200 disabled:text-gray-400 disabled:hover:brightness-100"
                   onClick={() => {
                     setName(localName);
-                    setUsername(localUsername);
+                    setEmail(localEmail);
                     setSoundEffects(localSoundEffects);
                     setListeningExercises(localListeningExercises);
                     setGoalXp(localGoalXp);
                   }}
                   disabled={
                     name === localName &&
-                    username === localUsername &&
+                    email === localEmail &&
                     localSoundEffects === soundEffects &&
                     localListeningExercises === listeningExercises &&
                     localGoalXp === goalXp

@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
 import React, { useEffect } from "react";
-import { LeftBar } from "../components/LeftBar";
-import { TopBar } from "~/components/TopBar";
-import { BottomBar } from "../components/BottomBar";
+import { LeftBar } from "../components/navigation/LeftBar";
+import { TopBar } from "~/components/navigation/TopBar";
+import { BottomBar } from "../components/navigation/BottomBar";
 import { useBoundStore } from "../hooks/useBoundStore";
 import Link from "next/link";
 import {

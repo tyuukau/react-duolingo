@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useBoundStore } from "../hooks/useBoundStore";
+import { useBoundStore } from "../../hooks/useBoundStore";
 
 type BottomBarItem = {
   name: Tab;

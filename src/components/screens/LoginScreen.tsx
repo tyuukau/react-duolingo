@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { CloseSvg } from "./Svgs";
+import { CloseSvg } from "../Svgs";
 import type { ComponentProps } from "react";
 import React, { useEffect, useRef, useState } from "react";
-import { useBoundStore } from "../hooks/useBoundStore";
+import { useBoundStore } from "../../hooks/useBoundStore";
 import { useRouter } from "next/router";
-import { FacebookLogoSvg, GoogleLogoSvg } from "./Svgs";
+import { FacebookLogoSvg, GoogleLogoSvg } from "../Svgs";
 
 export type LoginScreenState = "HIDDEN" | "LOGIN" | "SIGNUP";
 
@@ -34,12 +34,17 @@ export const LoginScreen = ({
   const router = useRouter();
   const loggedIn = useBoundStore((x) => x.loggedIn);
   const logIn = useBoundStore((x) => x.logIn);
-  const setUsername = useBoundStore((x) => x.setUsername);
+
+  const setEmail = useBoundStore((x) => x.setEmail);
   const setName = useBoundStore((x) => x.setName);
+  const setAge = useBoundStore((x) => x.setAge);
 
   const [ageTooltipShown, setAgeTooltipShown] = useState(false);
 
-  const nameInputRef = useRef<null | HTMLInputElement>(null);
+  const [localAge, setLocalAge] = useState("");
+  const [localName, setLocalName] = useState("");
+  const [localEmail, setLocalEmail] = useState("");
+  const [localPassword, setLocalPassword] = useState("");
 
   useEffect(() => {
     if (loginScreenState !== "HIDDEN" && loggedIn) {
@@ -48,23 +53,25 @@ export const LoginScreen = ({
   }, [loginScreenState, loggedIn, setLoginScreenState]);
 
   const logInAndSetUserProperties = () => {
-    const name =
-      nameInputRef.current?.value.trim() || Math.random().toString().slice(2);
-    const username = name.replace(/ +/g, "-");
-    setUsername(username);
-    setName(name);
-    logIn();
-    void router.push("/learn");
+    const number = parseFloat(localAge);
+    if (!isNaN(number) && number > 0) {
+      setAge(number);
+      setName(localName);
+      setEmail(localEmail);
+      logIn();
+      void router.push("/learn");
+    }
   };
 
   const logInAndSetUserPropertiesAndRegisterLanguage = () => {
-    const name =
-      nameInputRef.current?.value.trim() || Math.random().toString().slice(2);
-    const username = name.replace(/ +/g, "-");
-    setUsername(username);
-    setName(name);
-    logIn();
-    void router.push("/register");
+    const number = parseFloat(localAge);
+    if (!isNaN(number) && number > 0) {
+      setAge(number);
+      setName(localName);
+      setEmail(localEmail);
+      logIn();
+      void router.push("/register");
+    }
   };
 
   return (
@@ -106,6 +113,8 @@ export const LoginScreen = ({
                   <input
                     className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
                     placeholder="Age"
+                    value={localAge}
+                    onChange={(e) => setLocalAge(e.target.value)}
                   />
                   <div className="absolute right-0 top-0 bottom-0 flex items-center justify-center pr-4">
                     <div
@@ -130,17 +139,16 @@ export const LoginScreen = ({
                 <input
                   className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
                   placeholder="Name"
-                  ref={nameInputRef}
+                  value={localName}
+                  onChange={e => setLocalName(e.target.value)}
                 />
               </>
             )}
             <input
               className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
-              placeholder={
-                loginScreenState === "LOGIN"
-                  ? "Email or username"
-                  : "Email"
-              }
+              placeholder="Email"
+              value={localEmail}
+              onChange={e => setLocalEmail(e.target.value)}
             />
             <div className="relative flex grow">
               <input

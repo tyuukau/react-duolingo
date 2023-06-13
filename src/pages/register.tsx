@@ -1,9 +1,8 @@
 import type { NextPage } from "next";
 import Link from "next/link";
 import languages from "../utils/languages";
-import { FluenciaHeader } from "../components/LanguageHeader";
+import { FluenciaHeader } from "../components/FluenciaHeader";
 import { useBoundStore } from "../hooks/useBoundStore";
-import { Flag } from "../components/Flag";
 import _bgSnow from "../../public/bg-snow.svg";
 import type { StaticImageData } from "next/image";
 
@@ -39,7 +38,6 @@ const Register: NextPage = () => {
               }
               onClick={() => addNewLanguage(language)}
             >
-              {/* <Flag language={language} /> */}
               <span>{language.name}</span>
             </Link>
           ))}

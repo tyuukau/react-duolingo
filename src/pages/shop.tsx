@@ -4,10 +4,10 @@ import React, { useEffect } from "react";
 import { useBoundStore } from "../hooks/useBoundStore";
 import { useRouter } from "next/router";
 
-import { BottomBar } from "../components/BottomBar";
-import { LeftBar } from "../components/LeftBar";
-import { RightBar } from "../components/RightBar";
-import { TopBar } from "../components/TopBar";
+import { BottomBar } from "../components/navigation/BottomBar";
+import { LeftBar } from "../components/navigation/LeftBar";
+import { RightBar } from "../components/navigation/RightBar";
+import { TopBar } from "../components/navigation/TopBar";
 
 import { StreakFreezeSvg, EmptyGemSvg, DoubleOrNothingSvg } from "~/components/Svgs";
 
