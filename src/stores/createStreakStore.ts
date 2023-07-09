@@ -2,6 +2,7 @@ import dayjs from "dayjs";
 import type { BoundStateCreator } from "../hooks/useBoundStore";
 import type { DateString } from "../utils/dateString";
 import { toDateString } from "../utils/dateString";
+import type { XpByDate } from "./createUserAchievementStore";
 
 type ActiveDays = Set<DateString>;
 
@@ -26,6 +27,7 @@ const getCurrentStreak = (activeDays: ActiveDays): number => {
 export type StreakSlice = {
   activeDays: ActiveDays;
   streak: number;
+  setActiveDays: (days: XpByDate[]) => void;
   isActiveDay: (day: dayjs.Dayjs) => boolean;
   addToday: () => void;
 };
@@ -36,6 +38,11 @@ export const createStreakSlice: BoundStateCreator<StreakSlice> = (
 ) => ({
   activeDays: new Set(),
   streak: 0,
+  setActiveDays: (records: XpByDate[]) => {
+    const activeDays = new Set(records.map(entry => entry.date));
+    set({ activeDays, streak: getCurrentStreak(activeDays) });
+  },
+
   isActiveDay: (day: dayjs.Dayjs) => isActiveDay(get().activeDays, day),
   addToday: () => {
     const activeDays = addActiveDay(get().activeDays, dayjs());

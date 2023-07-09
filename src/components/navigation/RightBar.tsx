@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import {
   BronzeLeagueSvg,
@@ -20,7 +20,10 @@ import type { LoginScreenState } from "../screens/LoginScreen";
 import { LoginScreen } from "../screens/LoginScreen";
 import { useLeaderboardRank } from "../../hooks/useLeaderboard";
 
+import { useMutation } from "react-query";
+
 export const RightBar = () => {
+  const token = useBoundStore((x) => x.token);
   const loggedIn = useBoundStore((x) => x.loggedIn);
   const gems = useBoundStore((x) => x.gems);
   const streak = useBoundStore((x) => x.streak);
@@ -39,9 +42,42 @@ export const RightBar = () => {
   const [loginScreenState, setLoginScreenState] =
     useState<LoginScreenState>("HIDDEN");
 
+  const setCurrentLanguageMutation = useMutation((data) =>
+    fetch("http://localhost:8000/api/courses/languages/set_current/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    }).then(async (response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return Promise.reject(response);
+    })
+  );
+
+  const setCurrentLanguageHandler = async (language) => {
+    try {
+      const languageCode = language.code;
+      const languageProfileData = await setCurrentLanguageMutation.mutateAsync({ language_code: languageCode });
+      setCurrentLanguage(languageProfileData.current_language);
+      console.log('Language set as current language successfully');
+    } catch (error) {
+      console.error('Failed to set language as current language:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (!language) {
+      void router.push("/register");
+    }
+  });
+
   return (
     <>
-      <aside className="sticky top-0 hidden w-96 flex-col gap-6 self-start sm:flex">
+      <aside className="sticky top-0 hidden w-80 lg:w-88 xl:w-96 flex-col gap-6 self-start sm:flex">
         <article className="my-6 flex justify-between gap-4">
           <div
             className="relative flex cursor-default items-center gap-2 rounded-xl p-3 font-bold uppercase text-gray-500 hover:bg-gray-100"
@@ -67,7 +103,7 @@ export const RightBar = () => {
               {learningLanguages.map((language) => (
                 <button
                   className="flex w-full items-center gap-3 border-t-2 border-gray-300 px-5 py-3 text-left font-bold hover:bg-gray-100"
-                  onClick={() => setCurrentLanguage(language)}
+                  onClick={() => setCurrentLanguageHandler(language)}
                   key={language.code}
                 >
                   <span>{language.name}</span>
@@ -177,11 +213,11 @@ export const RightBar = () => {
 const UnlockLeaderboardsSection = () => {
   const lessonsCompleted = useBoundStore((x) => x.globalLessonsCompleted);
 
-  if (lessonsCompleted >= 10) {
+  if (lessonsCompleted >= 3) {
     return null;
   }
 
-  const lessonsNeededToUnlockLeaderboards = 10 - lessonsCompleted;
+  const lessonsNeededToUnlockLeaderboards = 3 - lessonsCompleted;
 
   return (
     <article className="flex flex-col gap-5 rounded-2xl border-2 border-gray-200 p-6 text-gray-700">

@@ -33,34 +33,44 @@ import {
 } from "../components/Svgs";
 import { TopBar } from "../components/navigation/TopBar";
 import { useBoundStore } from "../hooks/useBoundStore";
-import type { Tile, TileType, Unit } from "../utils/units";
-import { units } from "../utils/units";
+import type {
+  Level,
+  Chapter,
+  LevelType,
+  CourseData,
+} from "~/stores/createCourseDataStore";
+import type { Course } from "~/stores/createCourseStore";
+import { useQuery } from "react-query";
+import DefaultSpinner from "~/components/Spinner";
 
-type TileStatus = "LOCKED" | "ACTIVE" | "COMPLETE";
+type LevelStatus = "LOCKED" | "ACTIVE" | "COMPLETE";
 
-const tileStatus = (tile: Tile, lessonsCompleted: number): TileStatus => {
-  const lessonsPerTile = 4;
-  const tilesCompleted = Math.floor(lessonsCompleted / lessonsPerTile);
-  const tiles = units.flatMap((unit) => unit.tiles);
-  const tileIndex = tiles.findIndex((t) => t === tile);
+const levelStatus = (
+  chapters: Chapter[],
+  level: Level,
+  lessonsCompleted: number
+): LevelStatus => {
+  const levelsCompleted = lessonsCompleted;
+  const levels = chapters.flatMap((chapter) => chapter.levels);
+  const levelIndex = levels.findIndex((t) => t === level);
 
-  if (tileIndex < tilesCompleted) {
+  if (levelIndex < levelsCompleted) {
     return "COMPLETE";
   }
-  if (tileIndex > tilesCompleted) {
+  if (levelIndex > levelsCompleted) {
     return "LOCKED";
   }
   return "ACTIVE";
 };
 
-const TileIcon = ({
-  tileType,
+const LevelIcon = ({
+  levelType,
   status,
 }: {
-  tileType: TileType;
-  status: TileStatus;
+  levelType: LevelType;
+  status: LevelStatus;
 }): JSX.Element => {
-  switch (tileType) {
+  switch (levelType) {
     case "star":
       return status === "COMPLETE" ? (
         <CheckmarkSvg />
@@ -85,14 +95,7 @@ const TileIcon = ({
       ) : (
         <LockedDumbbellSvg />
       );
-    case "fast-forward":
-      return status === "COMPLETE" ? (
-        <CheckmarkSvg />
-      ) : status === "ACTIVE" ? (
-        <StarSvg />
-      ) : (
-        <FastForwardSvg />
-      );
+
     case "treasure":
       return status === "COMPLETE" ? (
         <GoldenTreasureSvg />
@@ -112,7 +115,7 @@ const TileIcon = ({
   }
 };
 
-const tileLeftClassNames = [
+const levelLeftClassNames = [
   "left-0",
   "left-[-45px]",
   "left-[-70px]",
@@ -123,69 +126,68 @@ const tileLeftClassNames = [
   "left-[45px]",
 ] as const;
 
-type TileLeftClassName = (typeof tileLeftClassNames)[number];
+type LevelLeftClassName = (typeof levelLeftClassNames)[number];
 
-const getTileLeftClassName = ({
+const getLevelLeftClassName = ({
   index,
-  unitNumber,
-  tilesLength,
+  chapterNumber,
+  levelsLength,
 }: {
   index: number;
-  unitNumber: number;
-  tilesLength: number;
-}): TileLeftClassName => {
-  if (index >= tilesLength - 1) {
+  chapterNumber: number;
+  levelsLength: number;
+}): LevelLeftClassName => {
+  if (index >= levelsLength - 1) {
     return "left-0";
   }
 
   const classNames =
-    unitNumber % 2 === 1
-      ? tileLeftClassNames
-      : [...tileLeftClassNames.slice(4), ...tileLeftClassNames.slice(0, 4)];
+    chapterNumber % 2 === 1
+      ? levelLeftClassNames
+      : [...levelLeftClassNames.slice(4), ...levelLeftClassNames.slice(0, 4)];
 
   return classNames[index % classNames.length] ?? "left-0";
 };
 
-const tileTooltipLeftOffsets = [140, 95, 70, 95, 140, 185, 210, 185] as const;
+const levelTooltipLeftOffsets = [140, 95, 70, 95, 140, 185, 210, 185] as const;
 
-type TileTooltipLeftOffset = (typeof tileTooltipLeftOffsets)[number];
+type LevelTooltipLeftOffset = (typeof levelTooltipLeftOffsets)[number];
 
-const getTileTooltipLeftOffset = ({
+const getLevelTooltipLeftOffset = ({
   index,
-  unitNumber,
-  tilesLength,
+  chapterNumber,
+  levelsLength,
 }: {
   index: number;
-  unitNumber: number;
-  tilesLength: number;
-}): TileTooltipLeftOffset => {
-  if (index >= tilesLength - 1) {
-    return tileTooltipLeftOffsets[0];
+  chapterNumber: number;
+  levelsLength: number;
+}): LevelTooltipLeftOffset => {
+  if (index >= levelsLength - 1) {
+    return levelTooltipLeftOffsets[0];
   }
 
   const offsets =
-    unitNumber % 2 === 1
-      ? tileTooltipLeftOffsets
+    chapterNumber % 2 === 1
+      ? levelTooltipLeftOffsets
       : [
-          ...tileTooltipLeftOffsets.slice(4),
-          ...tileTooltipLeftOffsets.slice(0, 4),
+          ...levelTooltipLeftOffsets.slice(4),
+          ...levelTooltipLeftOffsets.slice(0, 4),
         ];
 
-  return offsets[index % offsets.length] ?? tileTooltipLeftOffsets[0];
+  return offsets[index % offsets.length] ?? levelTooltipLeftOffsets[0];
 };
 
-const getTileColors = ({
-  tileType,
+const getLevelColors = ({
+  levelType,
   status,
   defaultColors,
 }: {
-  tileType: TileType;
-  status: TileStatus;
+  levelType: LevelType;
+  status: LevelStatus;
   defaultColors: `border-${string} bg-${string}`;
 }): `border-${string} bg-${string}` => {
   switch (status) {
     case "LOCKED":
-      if (tileType === "fast-forward") return defaultColors;
       return "border-[#b7b7b7] bg-[#e5e5e5]";
     case "COMPLETE":
       return "border-yellow-500 bg-yellow-400";
@@ -194,50 +196,102 @@ const getTileColors = ({
   }
 };
 
-const TileTooltip = ({
-  selectedTile,
+const LevelTooltip = ({
+  level,
+  selectedLevel,
   index,
-  unitNumber,
-  tilesLength,
+  chapters,
+  chapterNumber,
+  levelsLength,
   description,
   status,
   closeTooltip,
 }: {
-  selectedTile: number | null;
+  level: Level;
+  selectedLevel: number | null;
   index: number;
-  unitNumber: number;
-  tilesLength: number;
+  chapters: Chapter[];
+  chapterNumber: number;
+  levelsLength: number;
   description: string;
-  status: TileStatus;
+  status: LevelStatus;
   closeTooltip: () => void;
 }) => {
-  const tileTooltipRef = useRef<HTMLDivElement | null>(null);
+  const levelTooltipRef = useRef<HTMLDivElement | null>(null);
+  // const currentCourseContent = useBoundStore((x) => x.currentCourseContent);
 
   useEffect(() => {
-    const containsTileTooltip = (event: MouseEvent) => {
-      if (selectedTile !== index) return;
-      const clickIsInsideTooltip = tileTooltipRef.current?.contains(
+    const containsLevelTooltip = (event: MouseEvent) => {
+      if (selectedLevel !== index) return;
+      const clickIsInsideTooltip = levelTooltipRef.current?.contains(
         event.target as Node
       );
       if (clickIsInsideTooltip) return;
       closeTooltip();
     };
 
-    window.addEventListener("click", containsTileTooltip, true);
-    return () => window.removeEventListener("click", containsTileTooltip, true);
-  }, [selectedTile, tileTooltipRef, closeTooltip, index]);
+    window.addEventListener("click", containsLevelTooltip, true);
+    return () => window.removeEventListener("click", containsLevelTooltip, true);
+  }, [selectedLevel, levelTooltipRef, closeTooltip, index]);
 
-  const unit = units.find((unit) => unit.unitNumber === unitNumber);
-  const activeBackgroundColor = unit?.backgroundColor ?? "bg-green-500";
-  const activeTextColor = unit?.textColor ?? "text-green-500";
+  const chapter = chapters.find(
+    (chapter) => chapter.chapterNumber === chapterNumber
+  );
+  const activeBackgroundColor = chapter?.backgroundColor ?? "bg-green-500";
+  const activeTextColor = chapter?.textColor ?? "text-green-500";
+
+  const router = useRouter();
+  const setCurrentLevel = useBoundStore((x) => x.setCurrentLevel);
+  const setCurrentLevelContent = useBoundStore((x) => x.setCurrentLevelContent);
+  const token = useBoundStore((x) => x.token);
+
+  const fetchProblems = async () => {
+    const id = level.id;
+    const response = await fetch(
+      `http://localhost:8000/api/courses/level/get/${id}/`,
+      // `http://localhost:8000/api/courses/level/get/1/`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.ok) {
+      return response.json();
+    }
+    return Promise.reject(response);
+  };
+
+  const enterLevelHandler = async (e) => {
+    e.preventDefault;
+    setCurrentLevel(level);
+
+    const levelProblems = await fetchProblems();
+    setCurrentLevelContent(levelProblems);    
+
+    void router.push("/level");
+  }
+
+  const practiceLevelHandler = async (e) => {
+    e.preventDefault;
+    setCurrentLevel(level);
+
+    const levelProblems = await fetchProblems();
+    setCurrentLevelContent(levelProblems);    
+
+    void router.push("/level?practice");
+  }
 
   return (
     <div
       className={[
         "relative h-0 w-full",
-        index === selectedTile ? "" : "invisible",
+        index === selectedLevel ? "" : "invisible",
       ].join(" ")}
-      ref={tileTooltipRef}
+      ref={levelTooltipRef}
     >
       <div
         className={[
@@ -247,21 +301,25 @@ const TileTooltip = ({
             : status === "LOCKED"
             ? "border-2 border-gray-200 bg-gray-100"
             : "bg-yellow-400",
-          index === selectedTile ? "top-4 scale-100" : "-top-14 scale-0",
+          index === selectedLevel ? "top-4 scale-100" : "-top-14 scale-0",
         ].join(" ")}
         style={{ left: "calc(50% - 150px)" }}
       >
         <div
           className={[
-            "absolute top-[-8px] left-[140px] h-4 w-4 rotate-45",
+            "absolute left-[140px] top-[-8px] h-4 w-4 rotate-45",
             status === "ACTIVE"
               ? activeBackgroundColor
               : status === "LOCKED"
-              ? "border-t-2 border-l-2 border-gray-200 bg-gray-100"
+              ? "border-l-2 border-t-2 border-gray-200 bg-gray-100"
               : "bg-yellow-400",
           ].join(" ")}
           style={{
-            left: getTileTooltipLeftOffset({ index, unitNumber, tilesLength }),
+            left: getLevelTooltipLeftOffset({
+              index,
+              chapterNumber,
+              levelsLength,
+            }),
           }}
         ></div>
         <div
@@ -277,15 +335,16 @@ const TileTooltip = ({
           {description}
         </div>
         {status === "ACTIVE" ? (
-          <Link
-            href="/lesson"
+          <button
+            // href="/level"
             className={[
               "flex w-full items-center justify-center rounded-xl border-b-4 border-gray-200 bg-white p-3 uppercase",
               activeTextColor,
             ].join(" ")}
+            onClick={enterLevelHandler}
           >
-            Start +10 XP
-          </Link>
+            Start
+          </button>
         ) : status === "LOCKED" ? (
           <button
             className="w-full rounded-xl bg-gray-200 p-3 uppercase text-gray-400"
@@ -294,68 +353,75 @@ const TileTooltip = ({
             Locked
           </button>
         ) : (
-          <Link
-            href="/lesson"
+          <button
+            // href="/level?practice"
             className="flex w-full items-center justify-center rounded-xl border-b-4 border-yellow-200 bg-white p-3 uppercase text-yellow-400"
+            onClick={practiceLevelHandler}
           >
-            Practice +5 XP
-          </Link>
+            Practice
+          </button>
         )}
       </div>
     </div>
   );
 };
 
-const UnitSection = ({ unit }: { unit: Unit }): JSX.Element => {
-  const router = useRouter();
-  const loggedIn = useBoundStore((x) => x.loggedIn);
-
-  const [selectedTile, setSelectedTile] = useState<null | number>(null);
-
-  const closeTooltip = useCallback(() => setSelectedTile(null), []);
-
-  const language = useBoundStore((x) => x.currentLanguage);
-  const lessonsCompleted = useBoundStore((x) => x.coursesData[language.code]?.lessonsCompleted || 0);
-  const increaseLessonsCompleted = useBoundStore((x) => x.increaseLessonsCompleted);
-
-  const increaseGems = useBoundStore((x) => x.increaseGems);
+const ChapterSection = ({
+  chapter,
+  currentCourse,
+  lessonsCompleted,
+  currentCourseContent,
+}: {
+  chapter: Chapter;
+  currentCourse: Course;
+  lessonsCompleted: number;
+  currentCourseContent: Chapter[];
+}): JSX.Element => {
+  const [selectedLevel, setSelectedLevel] = useState<null | number>(null);
+  const closeTooltip = useCallback(() => setSelectedLevel(null), []);
 
   useEffect(() => {
-    if (!loggedIn) {
-      void router.push("/");
-    }
-    
-    const unselectTile = () => setSelectedTile(null);
-    window.addEventListener("scroll", unselectTile);
-    return () => window.removeEventListener("scroll", unselectTile);
-  }, [loggedIn, router]);
+    const unselectLevel = () => setSelectedLevel(null);
+    window.addEventListener("scroll", unselectLevel);
+    return () => window.removeEventListener("scroll", unselectLevel);
+  }, []);
 
   return (
     <>
-      <UnitHeader
-        unitNumber={unit.unitNumber}
-        description={unit.description}
-        backgroundColor={unit.backgroundColor}
-        borderColor={unit.borderColor}
+      <ChapterHeader
+        chapterNumber={chapter.chapterNumber}
+        description={chapter.description}
+        backgroundColor={chapter.backgroundColor}
+        borderColor={chapter.borderColor}
       />
-      <div className="relative mt-[67px] mb-8 flex max-w-2xl flex-col items-center gap-4">
-        {unit.tiles.map((tile, i): JSX.Element => {
-          const status = tileStatus(tile, lessonsCompleted);
+      <div className="relative mb-8 mt-[67px] flex max-w-2xl flex-col items-center gap-4">
+        {chapter.levels.map((level, i): JSX.Element => {
+          const status = levelStatus(
+            currentCourseContent,
+            level,
+            lessonsCompleted,
+          );
           return (
             <Fragment key={i}>
               {(() => {
-                switch (tile.type) {
+                switch (level.lessonType) {
                   case "star":
                   case "book":
                   case "dumbbell":
                   case "trophy":
-                  case "fast-forward":
-                    if (tile.type === "trophy" && status === "COMPLETE") {
+                  case "treasure":
+                    if (
+                      level.lessonType === "trophy" &&
+                      status === "COMPLETE"
+                    ) {
                       return (
                         <div className="relative">
-                          <TileIcon tileType={tile.type} status={status} />
-                          <div className="absolute top-6 left-0 right-0 flex justify-center text-lg font-bold text-yellow-700">
-                            {unit.unitNumber}
+                          <LevelIcon
+                            levelType={level.lessonType}
+                            status={status}
+                          />
+                          <div className="absolute left-0 right-0 top-6 flex justify-center text-lg font-bold text-yellow-700">
+                            {chapter.chapterNumber}
                           </div>
                         </div>
                       );
@@ -364,21 +430,13 @@ const UnitSection = ({ unit }: { unit: Unit }): JSX.Element => {
                       <div
                         className={[
                           "relative -mb-4 h-[93px] w-[98px]",
-                          getTileLeftClassName({
+                          getLevelLeftClassName({
                             index: i,
-                            unitNumber: unit.unitNumber,
-                            tilesLength: unit.tiles.length,
+                            chapterNumber: chapter.chapterNumber,
+                            levelsLength: chapter.levels.length,
                           }),
                         ].join(" ")}
                       >
-                        {tile.type === "fast-forward" && status === "LOCKED" ? (
-                          <HoverLabel
-                            text="Jump here?"
-                            textColor={unit.textColor}
-                          />
-                        ) : selectedTile !== i && status === "ACTIVE" ? (
-                          <HoverLabel text="Start" textColor={unit.textColor} />
-                        ) : null}
                         <LessonCompletionSvg
                           lessonsCompleted={lessonsCompleted}
                           status={status}
@@ -386,79 +444,42 @@ const UnitSection = ({ unit }: { unit: Unit }): JSX.Element => {
                         <button
                           className={[
                             "absolute m-3 rounded-full border-b-8 p-4",
-                            getTileColors({
-                              tileType: tile.type,
+                            getLevelColors({
+                              levelType: level.lessonType,
                               status,
-                              defaultColors: `${unit.borderColor} ${unit.backgroundColor}`,
+                              defaultColors: `${chapter.borderColor} ${chapter.backgroundColor}`,
                             }),
                           ].join(" ")}
                           onClick={() => {
-                            if (
-                              tile.type === "fast-forward" &&
-                              status === "LOCKED"
-                            ) {
-                              void router.push(
-                                `/lesson?fast-forward=${unit.unitNumber}`
-                              );
-                              return;
-                            }
-                            setSelectedTile(i);
+                            setSelectedLevel(i);
                           }}
                         >
-                          <TileIcon tileType={tile.type} status={status} />
+                          <LevelIcon
+                            levelType={level.lessonType}
+                            status={status}
+                          />
                           <span className="sr-only">Show lesson</span>
                         </button>
                       </div>
                     );
-                  case "treasure":
-                    return (
-                      <div
-                        className={[
-                          "relative -mb-4",
-                          getTileLeftClassName({
-                            index: i,
-                            unitNumber: unit.unitNumber,
-                            tilesLength: unit.tiles.length,
-                          }),
-                        ].join(" ")}
-                        onClick={() => {
-                          if (status === "ACTIVE") {
-                            increaseLessonsCompleted(language, 4);
-                            increaseGems(1);
-                          }
-                        }}
-                        role="button"
-                        tabIndex={status === "ACTIVE" ? 0 : undefined}
-                        aria-hidden={status !== "ACTIVE"}
-                        aria-label={status === "ACTIVE" ? "Collect reward" : ""}
-                      >
-                        {status === "ACTIVE" && (
-                          <HoverLabel text="Open" textColor="text-yellow-400" />
-                        )}
-                        <TileIcon tileType={tile.type} status={status} />
-                      </div>
-                    );
                 }
               })()}
-              <TileTooltip
-                selectedTile={selectedTile}
+              <LevelTooltip
+                level={level}
+                selectedLevel={selectedLevel}
                 index={i}
-                unitNumber={unit.unitNumber}
-                tilesLength={unit.tiles.length}
+                chapters={currentCourseContent}
+                chapterNumber={chapter.chapterNumber}
+                levelsLength={chapter.levels.length}
                 description={(() => {
-                  switch (tile.type) {
+                  switch (level.lessonType) {
                     case "book":
                     case "dumbbell":
                     case "star":
-                      return tile.description;
-                    case "fast-forward":
-                      return status === "LOCKED"
-                        ? "Jump here?"
-                        : tile.description;
-                    case "trophy":
-                      return `Unit ${unit.unitNumber} review`;
                     case "treasure":
-                      return "";
+                      return level.description;
+                    case "trophy":
+                      return `Chapter ${chapter.chapterNumber} review`;
                   }
                 })()}
                 status={status}
@@ -473,11 +494,13 @@ const UnitSection = ({ unit }: { unit: Unit }): JSX.Element => {
 };
 
 const getTopBarColors = (
-  scrollY: number
+  scrollY: number,
+  chapters: Chapter[]
 ): {
   backgroundColor: `bg-${string}`;
   borderColor: `border-${string}`;
 } => {
+  // const currentCourseContent = useBoundStore((x) => x.currentCourseContent)
   const defaultColors = {
     backgroundColor: "bg-[#58cc02]",
     borderColor: "border-[#46a302]",
@@ -486,9 +509,9 @@ const getTopBarColors = (
   if (scrollY < 680) {
     return defaultColors;
   } else if (scrollY < 1830) {
-    return units[1] ?? defaultColors;
+    return chapters[1] ?? defaultColors;
   } else {
-    return units[2] ?? defaultColors;
+    return chapters[2] ?? defaultColors;
   }
 };
 
@@ -498,24 +521,25 @@ const LessonCompletionSvg = ({
   style = {},
 }: {
   lessonsCompleted: number;
-  status: TileStatus;
+  status: LevelStatus;
   style?: React.HTMLAttributes<SVGElement>["style"];
 }) => {
   if (status !== "ACTIVE") {
     return null;
   }
-  switch (lessonsCompleted % 4) {
-    case 0:
-      return <LessonCompletionSvg0 style={style} />;
-    case 1:
-      return <LessonCompletionSvg1 style={style} />;
-    case 2:
-      return <LessonCompletionSvg2 style={style} />;
-    case 3:
-      return <LessonCompletionSvg3 style={style} />;
-    default:
-      return null;
-  }
+  return <LessonCompletionSvg0 style={style} />;
+  // switch (lessonsCompleted % 4) {
+  //   case 0:
+  //     return <LessonCompletionSvg0 style={style} />;
+  //   case 1:
+  //     return <LessonCompletionSvg1 style={style} />;
+  //   case 2:
+  //     return <LessonCompletionSvg2 style={style} />;
+  //   case 3:
+  //     return <LessonCompletionSvg3 style={style} />;
+  //   default:
+  //     return null;
+  // }
 };
 
 const HoverLabel = ({
@@ -534,7 +558,7 @@ const HoverLabel = ({
 
   return (
     <div
-      className={`absolute z-10 w-max animate-bounce rounded-lg border-2 border-gray-200 bg-white py-2 px-3 font-bold uppercase ${textColor}`}
+      className={`absolute z-10 w-max animate-bounce rounded-lg border-2 border-gray-200 bg-white px-3 py-2 font-bold uppercase ${textColor}`}
       style={{
         top: "-25%",
         left: `calc(50% - ${width / 2}px)`,
@@ -550,13 +574,13 @@ const HoverLabel = ({
   );
 };
 
-const UnitHeader = ({
-  unitNumber,
+const ChapterHeader = ({
+  chapterNumber,
   description,
   backgroundColor,
   borderColor,
 }: {
-  unitNumber: number;
+  chapterNumber: number;
   description: string;
   backgroundColor: `bg-${string}`;
   borderColor: `border-${string}`;
@@ -564,17 +588,15 @@ const UnitHeader = ({
   const language = useBoundStore((x) => x.currentLanguage);
   return (
     <article
-      className={["max-w-2xl text-white sm:rounded-xl", backgroundColor].join(
-        " "
-      )}
+      className={["max-w-2xl rounded-xl text-white", backgroundColor].join(" ")}
     >
       <header className="flex items-center justify-between gap-4 p-4">
         <div className="flex flex-col gap-1">
-          <h2 className="text-2xl font-bold">Unit {unitNumber}</h2>
+          <h2 className="text-2xl font-bold">Chapter {chapterNumber}</h2>
           <p className="text-lg">{description}</p>
         </div>
         <Link
-          href={`https://duolingo.com/guidebook/${language.code}/${unitNumber}`}
+          href={`https://duolingo.com/guidebook/${language.code}/${chapterNumber}`}
           className={[
             "flex items-center gap-3 rounded-2xl border-2 border-b-4 p-3 transition hover:text-gray-100",
             borderColor,
@@ -590,8 +612,11 @@ const UnitHeader = ({
   );
 };
 
-const Learn: NextPage = () => {
+////////////////////
+// MAIN COMPONENT //
+////////////////////
 
+const Learn: NextPage = () => {
   const [scrollY, setScrollY] = useState(0);
   useEffect(() => {
     const updateScrollY = () => setScrollY(globalThis.scrollY ?? scrollY);
@@ -600,7 +625,47 @@ const Learn: NextPage = () => {
     return () => document.removeEventListener("scroll", updateScrollY);
   }, [scrollY]);
 
-  const topBarColors = getTopBarColors(scrollY);
+  const token = useBoundStore((x) => x.token);
+
+  const currentCourse = useBoundStore((x) => x.currentCourse);
+  const currentCourseContent = useBoundStore((x) => x.currentCourseContent);
+  const setCurrentCourseContent = useBoundStore(
+    (x) => x.setCurrentCourseContent
+  );
+  const courseDatas = useBoundStore((x) => x.courseDatas)
+  const lessonsCompleted = courseDatas.find((data) => data.courseID === currentCourse.id)
+    ?.lessonsCompleted || 0;
+
+  const fetchChaptersAndLessons = async () => {
+    const id = currentCourse.id;
+    const response = await fetch(
+      `http://localhost:8000/api/courses/chapters/get/${id}/`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.ok) {
+      return response.json();
+    }
+    return Promise.reject(response);
+  };
+
+  const {
+    data: chapters,
+    isLoading,
+    error,
+  } = useQuery("chapterslessons", fetchChaptersAndLessons);
+
+  useEffect(() => {
+    setCurrentCourseContent(chapters);
+  }, [chapters, setCurrentCourseContent]);
+
+  const topBarColors = getTopBarColors(scrollY, currentCourseContent);
 
   return (
     <div>
@@ -612,26 +677,37 @@ const Learn: NextPage = () => {
 
       <div className="flex justify-center gap-3 pt-14 sm:p-6 sm:pt-10 md:ml-24 lg:ml-64 lg:gap-12">
         <div className="flex max-w-2xl grow flex-col">
-          {units.map((unit) => (
-            <UnitSection unit={unit} key={unit.unitNumber} />
-          ))}
-          <div className="sticky bottom-28 left-0 right-0 flex items-end justify-between">
-            <Link
-              href="/lesson?practice"
-              className="absolute left-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-b-4 border-gray-200 bg-white transition hover:bg-gray-50 hover:brightness-90 md:left-0"
-            >
-              <span className="sr-only">Practice exercise</span>
-              <PracticeExerciseSvg className="h-8 w-8" />
-            </Link>
-            {scrollY > 100 && (
-              <button
-                className="absolute right-4 flex h-14 w-14 items-center justify-center self-end rounded-2xl border-2 border-b-4 border-gray-200 bg-white transition hover:bg-gray-50 hover:brightness-90 md:right-0"
-                onClick={() => scrollTo(0, 0)}
+          <div className="px-4 py-7">
+            {" "}
+            {isLoading && <DefaultSpinner />}
+            {currentCourseContent &&
+              currentCourseContent.map((chapter) => (
+                <ChapterSection
+                  chapter={chapter}
+                  key={chapter.chapterNumber}
+                  currentCourse={currentCourse}
+                  lessonsCompleted={lessonsCompleted}
+                  currentCourseContent={currentCourseContent}
+                />
+              ))}
+            <div className="sticky bottom-28 left-0 right-0 flex items-end justify-between">
+              <Link
+                href="/level?practice"
+                className="absolute left-4 flex h-16 w-16 items-center justify-center rounded-full border-2 border-b-4 border-gray-200 bg-white transition hover:bg-gray-50 hover:brightness-90 md:left-0"
               >
-                <span className="sr-only">Jump to top</span>
-                <UpArrowSvg />
-              </button>
-            )}
+                <span className="sr-only">Practice exercise</span>
+                <PracticeExerciseSvg className="h-8 w-8" />
+              </Link>
+              {scrollY > 100 && (
+                <button
+                  className="absolute right-4 flex h-14 w-14 items-center justify-center self-end rounded-2xl border-2 border-b-4 border-gray-200 bg-white transition hover:bg-gray-50 hover:brightness-90 md:right-0"
+                  onClick={() => scrollTo(0, 0)}
+                >
+                  <span className="sr-only">Jump to top</span>
+                  <UpArrowSvg />
+                </button>
+              )}
+            </div>
           </div>
         </div>
         <RightBar />

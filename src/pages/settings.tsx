@@ -9,18 +9,25 @@ import { useBoundStore } from "../hooks/useBoundStore";
 import { useRouter } from "next/router";
 import { CoachSvg } from "~/components/Svgs";
 
+import { useQuery, useMutation } from "react-query";
+
 const Settings: NextPage = () => {
   const name = useBoundStore((x) => x.name);
-  const setName = useBoundStore((x) => x.setName);
   const [localName, setLocalName] = useState(name);
 
   const email = useBoundStore((x) => x.email);
-  const setEmail = useBoundStore((x) => x.setEmail);
   const [localEmail, setLocalEmail] = useState(email);
+
+  const age = useBoundStore((x) => x.age);
+  const [localAge, setLocalAge] = useState(age);
+
+  const token = useBoundStore((x) => x.token);
+  const id = useBoundStore((x) => x.id);
 
   const accountOptions = [
     { title: "Name", value: localName, setValue: setLocalName },
     { title: "Email", value: localEmail, setValue: setLocalEmail },
+    { title: "Age", value: localAge, setValue: setLocalAge },
   ];
 
   const goalXpOptions = [
@@ -32,11 +39,9 @@ const Settings: NextPage = () => {
   ];
 
   const soundEffects = useBoundStore((x) => x.soundEffects);
-  const setSoundEffects = useBoundStore((x) => x.setSoundEffects);
   const [localSoundEffects, setLocalSoundEffects] = useState(soundEffects);
 
   const listeningExercises = useBoundStore((x) => x.listeningExercises);
-  const setListeningExercises = useBoundStore((x) => x.setListeningExercises);
   const [localListeningExercises, setLocalListeningExercises] =
     useState(listeningExercises);
 
@@ -54,13 +59,67 @@ const Settings: NextPage = () => {
   ];
 
   const goalXp = useBoundStore((x) => x.goalXp);
-  const setGoalXp = useBoundStore((x) => x.setGoalXp);
-
   const [localGoalXp, setLocalGoalXp] = useState(goalXp);
+
+  const setUserInfo = useBoundStore((x) => x.setUserInfo);
+  const setUserPref = useBoundStore((x) => x.setUserPref);
 
   const router = useRouter();
   const loggedIn = useBoundStore((x) => x.loggedIn);
   const logout = useBoundStore((x) => x.logout);
+
+  const updateUserMutation = useMutation((credentials) =>
+    fetch("http://localhost:8000/api/users/update/", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(credentials),
+    }).then(async (response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return Promise.reject(response);
+    })
+  );
+
+  const updateUserPrefMutation = useMutation((credentials) =>
+    fetch("http://localhost:8000/api/users/pref/update/", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(credentials),
+    }).then(async (response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return Promise.reject(response);
+    })
+  );
+
+  const updateUserAndPrefHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const data = await updateUserMutation.mutateAsync({
+        id: id,
+        name: localName,
+        email: localEmail,
+        age: localAge,
+      });
+      const data2 = await updateUserPrefMutation.mutateAsync({
+        soundEffects: localSoundEffects,
+        listeningExercises: localListeningExercises,
+        goalXp: localGoalXp,
+      });
+      setUserInfo(localName, localEmail, localAge);
+      setUserPref(localGoalXp, localSoundEffects, localListeningExercises);
+    } catch (error) {
+      console.error("Update User failed:", error);
+    }
+  };
 
   useEffect(() => {
     if (!loggedIn) {
@@ -187,16 +246,20 @@ const Settings: NextPage = () => {
               <div className="flex w-full max-w-4xl flex-col gap-6">
                 <button
                   className="w-full gap-2 rounded-2xl border-b-4 border-green-600 bg-green-500 px-5 py-3 font-bold uppercase text-white transition disabled:border-b-0 disabled:bg-gray-200 disabled:text-gray-400 disabled:hover:brightness-100"
-                  onClick={() => {
-                    setName(localName);
-                    setEmail(localEmail);
-                    setSoundEffects(localSoundEffects);
-                    setListeningExercises(localListeningExercises);
-                    setGoalXp(localGoalXp);
-                  }}
+                  onClick={
+                    updateUserAndPrefHandler
+                    //   () => {
+                    //   setName(localName);
+                    //   setEmail(localEmail);
+                    //   setSoundEffects(localSoundEffects);
+                    //   setListeningExercises(localListeningExercises);
+                    //   setGoalXp(localGoalXp);
+                    // }
+                  }
                   disabled={
                     name === localName &&
                     email === localEmail &&
+                    age === localAge &&
                     localSoundEffects === soundEffects &&
                     localListeningExercises === listeningExercises &&
                     localGoalXp === goalXp
@@ -207,29 +270,6 @@ const Settings: NextPage = () => {
               </div>
             </div>
           </section>
-          {/* <div className="flex justify-center gap-6 pb-10">
-            <div className="flex">
-              <button
-                className="w-full gap-2 rounded-2xl border-b-4 border-green-600 bg-green-500 px-5 py-3 font-bold uppercase text-white transition disabled:border-b-0 disabled:bg-gray-200 disabled:text-gray-400 disabled:hover:brightness-100"
-                onClick={() => {
-                  setName(localName);
-                  setUsername(localUsername);
-                  setSoundEffects(localSoundEffects);
-                  setListeningExercises(localListeningExercises);
-                  setGoalXp(localGoalXp);
-                }}
-                disabled={
-                  name === localName &&
-                  username === localUsername &&
-                  localSoundEffects === soundEffects &&
-                  localListeningExercises === listeningExercises &&
-                  localGoalXp === goalXp
-                }
-              >
-                Save changes
-              </button>
-            </div>
-          </div> */}
         </div>
       </div>
       <div className="pt-[90px]"></div>

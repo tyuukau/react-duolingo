@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useBoundStore } from "../../hooks/useBoundStore";
 import { Calendar } from "../Calendar";
 import { Flag } from "../Flag";
@@ -14,10 +14,12 @@ import {
   PodcastIconSvg,
   EmptyFireTopBarSvg,
   EmptyGemTopBarSvg,
-  AddLanguageSvg
+  AddLanguageSvg,
 } from "../Svgs";
 
 type MenuState = "HIDDEN" | "LANGUAGES" | "STREAK" | "GEMS" | "MORE";
+
+import { useMutation } from "react-query";
 
 export const TopBar = ({
   backgroundColor = "bg-[#58cc02]",
@@ -31,13 +33,49 @@ export const TopBar = ({
   const streak = useBoundStore((x) => x.streak);
   const gems = useBoundStore((x) => x.gems);
   const language = useBoundStore((x) => x.currentLanguage);
+  const token = useBoundStore((x) => x.token);
   const learningLanguages = useBoundStore((x) => x.learningLanguages);
   const setCurrentLanguage = useBoundStore((x) => x.setCurrentLanguage);
+
+  useEffect(() => {
+    if (!language) {
+      void router.push("/register");
+    }
+  });
+
+  const setCurrentLanguageMutation = useMutation((data) =>
+    fetch("http://localhost:8000/api/courses/languages/set_current/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    }).then(async (response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return Promise.reject(response);
+    })
+  );
+
+  const setCurrentLanguageHandler = async (language) => {
+    try {
+      const languageCode = language.code;
+      const languageProfileData = await setCurrentLanguageMutation.mutateAsync({
+        language_code: languageCode,
+      });
+      setCurrentLanguage(languageProfileData.current_language);
+      console.log("Language set as current language successfully");
+    } catch (error) {
+      console.error("Failed to set language as current language:", error);
+    }
+  };
 
   return (
     <header className="fixed z-20 h-[58px] w-full">
       <div
-        className={`relative flex h-full w-full items-center justify-between border-b-2 px-[10px] transition duration-500 sm:hidden ${borderColor} ${backgroundColor}`}
+        className={`relative flex h-full w-full items-center justify-between border-b-2 px-[10px] transition duration-500 sm:hidden backdrop-blur-xl bg-white/30`}
       >
         <button
           onClick={() =>
@@ -56,7 +94,7 @@ export const TopBar = ({
           aria-label="Toggle streak menu"
         >
           {streak > 0 ? <FireSvg /> : <EmptyFireTopBarSvg />}{" "}
-          <span className={streak > 0 ? "text-white" : "text-black opacity-20"}>
+          <span className="text-black opacity-20">
             {streak}
           </span>
         </button>
@@ -67,7 +105,7 @@ export const TopBar = ({
           aria-label="Toggle gem menu"
         >
           {gems > 0 ? <GemSvg /> : <EmptyGemTopBarSvg />}{" "}
-          <span className={gems > 0 ? "text-white" : "text-black opacity-20"}>
+          <span className="text-black opacity-20">
             {gems}
           </span>
         </button>
@@ -94,8 +132,11 @@ export const TopBar = ({
                   <div className="flex flex-col gap-5 p-5">
                     {learningLanguages.map((language) => (
                       <button
-                        className="flex w-full items-center gap-3 px-5 py-3 text-left font-bold hover:bg-gray-100 text-gray-400"
-                        onClick={() => {setCurrentLanguage(language); setMenu("HIDDEN")}}
+                        className="flex w-full items-center gap-3 px-5 py-3 text-left font-bold text-gray-400 hover:bg-gray-100"
+                        onClick={() => {
+                          setCurrentLanguageHandler(language);
+                          setMenu("HIDDEN");
+                        }}
                         key={language.code}
                       >
                         <span>{language.name}</span>

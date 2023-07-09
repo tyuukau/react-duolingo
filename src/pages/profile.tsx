@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { TopBar } from "../components/navigation/TopBar";
 import { BottomBar } from "../components/navigation/BottomBar";
 import { LeftBar } from "../components/navigation/LeftBar";
 import {
@@ -84,22 +85,6 @@ const ProfileTopSection = () => {
 
         {/* <Flag language={language} width={40} /> */}
       </div>
-      {/* <div className="flex flex-col space-y-4">
-        <Link
-          href="/settings"
-          className="hidden items-center gap-2 self-start rounded-2xl border-b-4 border-blue-500 bg-blue-400 px-5 py-3 font-bold uppercase text-white transition hover:brightness-110 md:flex"
-        >
-          <EditPencilSvg />
-          Settings
-        </Link>
-        <Link
-          href="/help"
-          className="hidden items-center gap-2 self-start rounded-2xl border-b-4 border-gray-500 bg-gray-400 px-5 py-3 font-bold uppercase text-white transition hover:brightness-110 md:flex"
-        >
-          <EditPencilSvg />
-          Help
-        </Link>
-      </div> */}
     </section>
   );
 };
@@ -137,7 +122,7 @@ const ProfileStatsSection = () => {
             <span className="text-sm text-gray-400 md:text-base">Total XP</span>
           </div>
         </div>
-        <div className="flex gap-2 rounded-2xl border-2 border-gray-200 p-2 md:gap-3 md:px-6 md:py-4">
+        {/* <div className="flex gap-2 rounded-2xl border-2 border-gray-200 p-2 md:gap-3 md:px-6 md:py-4">
           <BronzeLeagueSvg width={25} height={35} />
           <div className="flex flex-col">
             <span className="text-xl font-bold">{league}</span>
@@ -145,7 +130,7 @@ const ProfileStatsSection = () => {
               Current league
             </span>
           </div>
-        </div>
+        </div> */}
         {/* <div className="flex gap-2 rounded-2xl border-2 border-gray-200 p-2 md:gap-3 md:px-6 md:py-4">
           {top3Finishes === 0 ? <EmptyMedalSvg /> : <EmptyMedalSvg />}
           <div className="flex flex-col">
@@ -207,11 +192,15 @@ const ProfileFriendsSection = () => {
   );
 };
 
+////////////////////
+// MAIN COMPONENT //
+////////////////////
+
 const Profile: NextPage = () => {
   const logOut = useBoundStore((x) => x.logOut);
   return (
     <div>
-      <ProfileTopBar />
+      <TopBar />
       <LeftBar selectedTab="Profile" />
 
       <div className="flex justify-center gap-3 pt-14 sm:p-6 sm:pt-10 md:ml-24 lg:ml-64 lg:gap-12">
@@ -222,9 +211,9 @@ const Profile: NextPage = () => {
               <div className="flex flex-row space-x-4">
                 <Link
                   href="/settings"
-                  className="flex items-center gap-2 self-start rounded-2xl border-b-4 border-blue-500 bg-blue-400 px-5 py-3 font-bold uppercase text-white transition hover:brightness-110 md:flex"
+                  className="flex h-full items-center gap-2 self-start rounded-2xl border-b-4 border-blue-500 bg-blue-400 px-5 py-3 font-bold uppercase text-white transition hover:brightness-110 md:flex"
                 >
-                  <EditPencilSvg />
+                  <SettingsGearSvg />
                   <div className="hidden sm:flex">Settings</div>
                 </Link>
                 <Link

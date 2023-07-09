@@ -41,9 +41,9 @@ const LeaderboardExplanationSection = () => {
   );
 };
 
-type TimeLeftUnit = "days" | "hours" | "minutes";
+type TimeLeftChapter = "days" | "hours" | "minutes";
 
-const timeUntilStartOfWeek = (units: TimeLeftUnit): number => {
+const timeUntilStartOfWeek = (chapters: TimeLeftChapter): number => {
   const startOfWeekDay = 0;
   const startOfWeekHour = 20;
   const daysAhead =
@@ -54,10 +54,10 @@ const timeUntilStartOfWeek = (units: TimeLeftUnit): number => {
     .startOf("day")
     .add(startOfWeekHour, "hours")
     .add(daysAhead, "day");
-  return startOfWeek.diff(dayjs(), units);
+  return startOfWeek.diff(dayjs(), chapters);
 };
 
-const timeLeft = (): `${number} ${TimeLeftUnit}` => {
+const timeLeft = (): `${number} ${TimeLeftChapter}` => {
   if (timeUntilStartOfWeek("days") > 0) {
     return `${timeUntilStartOfWeek("days")} days`;
   }
@@ -99,13 +99,13 @@ const LeaderboardProfile = ({
             {place}
           </div>
         )}
-        <Image
+        {/* <Image
           width={48}
           height={48}
           className="h-12 w-12 rounded-full"
           src={defaultPicture}
           alt=""
-        />
+        /> */}
       </div>
       <div className="grow overflow-hidden overflow-ellipsis font-bold">
         {name}
@@ -114,6 +114,10 @@ const LeaderboardProfile = ({
     </div>
   );
 };
+
+////////////////////
+// MAIN COMPONENT //
+////////////////////
 
 const Leaderboard: NextPage = () => {
   const router = useRouter();
@@ -127,12 +131,12 @@ const Leaderboard: NextPage = () => {
     }
   }, [loggedIn, router]);
 
-  const lessonsToUnlockLeaderboard = 10;
+  const lessonsToUnlockLeaderboard = 5;
   const lessonsRemainingToUnlockLeaderboard =
     lessonsToUnlockLeaderboard - lessonsCompleted;
   const leaderboardIsUnlocked = lessonsCompleted >= lessonsToUnlockLeaderboard;
 
-  const leaderboardLeague = "Bronze League";
+  const leaderboardLeague = "Fluencia League";
 
   const leaderboardUsers = useLeaderboardUsers();
 
@@ -169,20 +173,8 @@ const Leaderboard: NextPage = () => {
               <div className="sticky top-0 -mt-14 flex w-full flex-col items-center gap-5 bg-white pt-14">
                 <div className="flex items-center gap-5">
                   <BronzeLeagueSvg className="h-fit w-20" />
-                  <LockedLeagueSvg />
-                  <LockedLeagueSvg />
-                  <LockedLeagueSvg />
-                  <LockedLeagueSvg />
                 </div>
                 <h1 className="text-2xl font-bold">{leaderboardLeague}</h1>
-                <div className="flex w-full flex-col items-center gap-1 pb-5">
-                  <p className="text-lg text-gray-500">
-                    Top 20 advance to the next league
-                  </p>
-                  <time className="font-bold text-yellow-400">
-                    {timeLeft()}
-                  </time>
-                </div>
                 <div className="w-full border-b-2 border-gray-200"></div>
               </div>
               <div className="w-full">

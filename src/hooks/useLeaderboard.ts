@@ -1,4 +1,4 @@
-import { fakeUsers } from "../utils/fakeUsers";
+import { fakeUsers } from "../utils/fakeDatas/fakeUsers";
 import { useBoundStore } from "./useBoundStore";
 
 export const useLeaderboardUsers = () => {

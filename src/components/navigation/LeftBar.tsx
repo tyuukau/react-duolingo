@@ -6,9 +6,6 @@ import type { LoginScreenState } from "../screens/LoginScreen";
 import { LoginScreen } from "../screens/LoginScreen";
 
 export const LeftBar = ({ selectedTab }: { selectedTab: Tab | null }) => {
-  const help = () => {
-    console.log("Help");
-  };
 
   const [moreMenuShown, setMoreMenuShown] = useState(false);
   const [loginScreenState, setLoginScreenState] =

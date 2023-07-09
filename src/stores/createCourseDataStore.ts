@@ -1,66 +1,50 @@
-import { units } from "../utils/units";
 import type { BoundStateCreator } from "../hooks/useBoundStore";
-import { Language } from "~/utils/languages";
+import type { Course } from "./createCourseStore";
 
 import { immer } from "zustand/middleware/immer";
 
-type CourseData = {
+export type Level = {
+  lessonNumber: number;
+  chapter: number;
+  lessonType:
+    | "star"
+    | "dumbbell"
+    | "book"
+    | "trophy"
+    | "treasure";
+  description: string;
+  id: number;
+};
+
+export type LevelType = Level["lessonType"];
+
+export type Chapter = {
+  id: number;
+  course: number;
+  chapterNumber: number;
+  description: string;
+  backgroundColor: `bg-${string}`;
+  textColor: `text-${string}`;
+  borderColor: `border-${string}`;
+  date_created: string;
+  levels: Level[];
+};
+
+export type CourseData = {
+  courseID: number;
   lessonsCompleted: number;
 };
 
 export type CourseDataSlice = {
-  globalLessonsCompleted: number;
-  coursesData: Record<string, CourseData>;
-  increaseLessonsCompleted: (Language, by?: number) => void;
-  jumpToUnit: (Language, unitNumber: number) => void;
-  initialiseCourseDataRecord: (languageCode: string) => void;
+  courseDatas: CourseData[];
+  setCourseDatas: (courseDatas: CourseData[]) => void;
 };
 
-export const CourseDataSlice: BoundStateCreator<CourseDataSlice> = (set) => ({
-  globalLessonsCompleted: 0,
-  coursesData: {},
+export const createCourseDataSlice: BoundStateCreator<CourseDataSlice> = (
+  set
+) => ({
+  courseDatas: {},
 
-  increaseLessonsCompleted: (language: Language, by = 1) =>
-    set((state) => {
-      const lessonsCompleted = state.coursesData[language.code]?.lessonsCompleted || 0;
-      return {
-        ...state,
-        globalLessonsCompleted: state.globalLessonsCompleted + by,
-        coursesData: {
-          ...state.coursesData,
-          [language.code]: { lessonsCompleted: lessonsCompleted + by },
-        },
-      };
-    }),    
-
-  jumpToUnit: (language: Language, unitNumber: number) =>
-    set((state) => {
-      const lessonsPerTile = 4;
-      const totalLessonsToJumpToUnit = units
-        .filter((unit) => unit.unitNumber < unitNumber)
-        .map((unit) => unit.tiles.length * lessonsPerTile)
-        .reduce((a, b) => a + b, 0);
-      const lessonsCompleted = state.coursesData[language.code]?.lessonsCompleted || 0;
-      return {
-        ...state,
-        coursesData: {
-          ...state.coursesData,
-          [language.code]: { lessonsCompleted: Math.max(lessonsCompleted, totalLessonsToJumpToUnit) },
-        },
-      };
-    }),
-
-  initialiseCourseDataRecord: (language: Language) =>
-    set((state) => {
-      if (!state.coursesData[language.code]) {
-        return {
-          ...state,
-          coursesData: {
-            ...state.coursesData,
-            [language.code]: { lessonsCompleted: 0 },
-          },
-        };
-      }
-      return state;
-    }),
+  setCourseDatas: (courseDatas: CourseData[]) =>
+    set(() => ({ courseDatas: courseDatas })),
 });

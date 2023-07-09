@@ -6,7 +6,11 @@ import { useBoundStore } from "../../hooks/useBoundStore";
 import { useRouter } from "next/router";
 import { FacebookLogoSvg, GoogleLogoSvg } from "../Svgs";
 
+import { useMutation, useQuery, useQueryClient } from "react-query";
+
 export type LoginScreenState = "HIDDEN" | "LOGIN" | "SIGNUP";
+
+import type { Course } from "../../stores/createCourseStore";
 
 export const useLoginScreen = () => {
   const router = useRouter();
@@ -35,9 +39,23 @@ export const LoginScreen = ({
   const loggedIn = useBoundStore((x) => x.loggedIn);
   const logIn = useBoundStore((x) => x.logIn);
 
-  const setEmail = useBoundStore((x) => x.setEmail);
-  const setName = useBoundStore((x) => x.setName);
-  const setAge = useBoundStore((x) => x.setAge);
+  const setUser = useBoundStore((x) => x.setUser);
+  const setUserPref = useBoundStore((x) => x.setUserPref);
+
+  const setUserHistory = useBoundStore((x) => x.setUserHistory);
+  const setXpAllTime = useBoundStore((x) => x.setXpAllTime);
+  const setGems = useBoundStore((x) => x.setGems);
+  const setGlobalLessonsCompleted = useBoundStore((x) => x.setGlobalLessonsCompleted);
+  const setActiveDays = useBoundStore((x) => x.setActiveDays);
+
+  const token = useBoundStore((x) => x.token);
+
+  const setCurrentLanguage = useBoundStore((x) => x.setCurrentLanguage);
+  const setLanguages = useBoundStore((x) => x.setLanguages);
+
+  const setCurrentCourse = useBoundStore((x) => x.setCurrentCourse);
+  const setCourses = useBoundStore((x) => x.setCourses);
+  const setCourseDatas = useBoundStore((x) => x.setCourseDatas);
 
   const [ageTooltipShown, setAgeTooltipShown] = useState(false);
 
@@ -52,25 +70,188 @@ export const LoginScreen = ({
     }
   }, [loginScreenState, loggedIn, setLoginScreenState]);
 
-  const logInAndSetUserProperties = () => {
-    const number = parseFloat(localAge);
-    if (!isNaN(number) && number > 0) {
-      setAge(number);
-      setName(localName);
-      setEmail(localEmail);
+  const fetchUserPref = async (token) => {
+    const response = await fetch("http://localhost:8000/api/users/pref/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      return response.json();
+    }
+    return Promise.reject(response);
+  };
+
+  const fetchLanguageProfile = async (token) => {
+    const response = await fetch(
+      "http://localhost:8000/api/courses/languages/profile/get/",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.ok) {
+      return response.json();
+    }
+    return Promise.reject(response);
+  };
+
+  const fetchCourseProfile = async (token) => {
+    const response = await fetch(
+      "http://localhost:8000/api/courses/profile/get/",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.ok) {
+      return response.json();
+    }
+    return Promise.reject(response);
+  };
+
+  const fetchCourseDatas = async (token) => {
+    const response = await fetch(
+      "http://localhost:8000/api/courses/data/get/",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.ok) {
+      return response.json();
+    }
+    return Promise.reject(response);
+  };
+
+  const fetchUserAchievement = async (token) => {
+    const response = await fetch(
+      "http://localhost:8000/api/users/achievement/",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.ok) {
+      return response.json();
+    }
+    return Promise.reject(response);
+  };
+
+  const signInMutation = useMutation((credentials) =>
+    fetch("http://localhost:8000/api/users/login/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    }).then(async (response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return Promise.reject(response);
+    })
+  );
+
+  const signUpMutation = useMutation((credentials) =>
+    fetch("http://localhost:8000/api/users/signup/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    }).then(async (response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return Promise.reject(response);
+    })
+  );
+
+  const signInHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const data = await signInMutation.mutateAsync({
+        email: localEmail,
+        password: localPassword,
+      });
+      setUser(data.name, data.email, data.age, data.token, data.id);
+
+      const userPrefData = await fetchUserPref(data.token);
+      setUserPref(
+        userPrefData.goal_xp,
+        userPrefData.sound_effects,
+        userPrefData.listening_exercises
+      );
+
+      const languageProfileData = await fetchLanguageProfile(data.token);
+      setLanguages(languageProfileData.learning_languages);
+      setCurrentLanguage(languageProfileData.current_language);
+
+      const courseProfileData = await fetchCourseProfile(data.token);
+      setCourses(courseProfileData.learning_courses);
+      setCurrentCourse(courseProfileData.current_course);
+
+      const courseDatas = await fetchCourseDatas(data.token);
+      setCourseDatas(courseDatas);    
+
+      const userAchievement = await fetchUserAchievement(data.token);
+      setUserHistory(userAchievement.userHistory);
+      setActiveDays(userAchievement.userHistory);
+      setXpAllTime(userAchievement.xpAllTime);
+      setGems(userAchievement.gems);
+      setGlobalLessonsCompleted(userAchievement.globalLessonsCompleted);
+
       logIn();
-      void router.push("/learn");
+      void router.push("/courses");
+    } catch (error) {
+      console.error("Sign In failed:", error);
     }
   };
 
-  const logInAndSetUserPropertiesAndRegisterLanguage = () => {
-    const number = parseFloat(localAge);
-    if (!isNaN(number) && number > 0) {
-      setAge(number);
-      setName(localName);
-      setEmail(localEmail);
+  const signUpHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const data = await signUpMutation.mutateAsync({
+        name: localName,
+        email: localEmail,
+        password: localPassword,
+        age: localAge,
+      });
+      const data2 = await signInMutation.mutateAsync({
+        email: localEmail,
+        password: localPassword,
+      });
+      setUser(data2.name, data2.email, data2.age, data2.token, data2.id);
+      const userPrefData = await fetchUserPref(data.token);
+      setUserPref(
+        userPrefData.goal_xp,
+        userPrefData.sound_effects,
+        userPrefData.listening_exercises
+      );
       logIn();
       void router.push("/register");
+    } catch (error) {
+      console.error("Sign Up failed:", error);
     }
   };
 
@@ -116,7 +297,7 @@ export const LoginScreen = ({
                     value={localAge}
                     onChange={(e) => setLocalAge(e.target.value)}
                   />
-                  <div className="absolute right-0 top-0 bottom-0 flex items-center justify-center pr-4">
+                  <div className="absolute bottom-0 right-0 top-0 flex items-center justify-center pr-4">
                     <div
                       className="relative flex h-6 w-6 cursor-pointer items-center justify-center rounded-full border-2 border-gray-200 text-gray-400"
                       onMouseEnter={() => setAgeTooltipShown(true)}
@@ -128,9 +309,9 @@ export const LoginScreen = ({
                     >
                       ?
                       {ageTooltipShown && (
-                        <div className="absolute top-full -right-5 z-10 w-72 rounded-2xl border-2 border-gray-200 bg-white p-4 text-center text-xs leading-5 text-gray-800">
+                        <div className="absolute -right-5 top-full z-10 w-72 rounded-2xl border-2 border-gray-200 bg-white p-4 text-center text-xs leading-5 text-gray-800">
                           Providing your age ensures you get the right Fluencia
-                          experience. 
+                          experience.
                         </div>
                       )}
                     </div>
@@ -140,7 +321,7 @@ export const LoginScreen = ({
                   className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
                   placeholder="Name"
                   value={localName}
-                  onChange={e => setLocalName(e.target.value)}
+                  onChange={(e) => setLocalName(e.target.value)}
                 />
               </>
             )}
@@ -148,16 +329,18 @@ export const LoginScreen = ({
               className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
               placeholder="Email"
               value={localEmail}
-              onChange={e => setLocalEmail(e.target.value)}
+              onChange={(e) => setLocalEmail(e.target.value)}
             />
             <div className="relative flex grow">
               <input
                 className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
                 placeholder="Password"
                 type="password"
+                value={localPassword}
+                onChange={(e) => setLocalPassword(e.target.value)}
               />
               {loginScreenState === "LOGIN" && (
-                <div className="absolute right-0 top-0 bottom-0 flex items-center justify-center pr-5">
+                <div className="absolute bottom-0 right-0 top-0 flex items-center justify-center pr-5">
                   <Link
                     className="font-bold uppercase text-gray-400 hover:brightness-75"
                     href="/forgot-password"
@@ -170,7 +353,9 @@ export const LoginScreen = ({
           </div>
           <button
             className="rounded-2xl border-b-4 border-blue-500 bg-blue-400 py-3 font-bold uppercase text-white transition hover:brightness-110"
-            onClick={loginScreenState === "LOGIN" ? logInAndSetUserProperties : logInAndSetUserPropertiesAndRegisterLanguage}
+            onClick={
+              loginScreenState === "LOGIN" ? signInHandler : signUpHandler
+            }
           >
             {loginScreenState === "LOGIN" ? "Log in" : "Create account"}
           </button>
@@ -182,21 +367,21 @@ export const LoginScreen = ({
           <div className="flex gap-5">
             <button
               className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-b-4 border-gray-200 py-3 font-bold text-blue-900 transition hover:bg-gray-50 hover:brightness-90"
-              onClick={logInAndSetUserProperties}
+              onClick={signInHandler}
             >
               <FacebookLogoSvg className="h-5 w-5" /> Facebook
             </button>
             <button
               className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-b-4 border-gray-200 py-3 font-bold text-blue-600 transition hover:bg-gray-50 hover:brightness-90"
-              onClick={logInAndSetUserProperties}
+              onClick={signInHandler}
             >
               <GoogleLogoSvg className="h-5 w-5" /> Google
             </button>
           </div>
-          <p className="text-center text-xs leading-5 text-gray-400">
+          {/* <p className="text-center text-xs leading-5 text-gray-400">
             By signing in to Fluencia, you agree to our Terms and Privacy.
-          </p>
-          <p className="text-center text-xs leading-5 text-gray-400">
+          </p> */}
+          {/* <p className="text-center text-xs leading-5 text-gray-400">
             This site is protected by reCAPTCHA Enterprise and the Google{" "}
             <Link
               className="font-bold"
@@ -212,7 +397,7 @@ export const LoginScreen = ({
               Terms of Service
             </Link>{" "}
             apply.
-          </p>
+          </p> */}
           <p className="block text-center sm:hidden">
             <span className="text-sm font-bold text-gray-700">
               {loginScreenState === "LOGIN"
