@@ -29,13 +29,9 @@ export type StreakSlice = {
   streak: number;
   setActiveDays: (days: XpByDate[]) => void;
   isActiveDay: (day: dayjs.Dayjs) => boolean;
-  addToday: () => void;
 };
 
-export const createStreakSlice: BoundStateCreator<StreakSlice> = (
-  set,
-  get
-) => ({
+export const createStreakSlice: BoundStateCreator<StreakSlice> = (set) => ({
   activeDays: new Set(),
   streak: 0,
   setActiveDays: (records: XpByDate[]) => {
@@ -44,8 +40,4 @@ export const createStreakSlice: BoundStateCreator<StreakSlice> = (
   },
 
   isActiveDay: (day: dayjs.Dayjs) => isActiveDay(get().activeDays, day),
-  addToday: () => {
-    const activeDays = addActiveDay(get().activeDays, dayjs());
-    set({ activeDays, streak: getCurrentStreak(activeDays) });
-  },
 });

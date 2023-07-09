@@ -44,12 +44,11 @@ export type UserAchievementSlice = {
   setGems: (gem: number) => void;
   setGlobalLessonsCompleted: (globalLessonsCompleted: number) => void;
 
-  increaseXp: (by: number) => void;
   xpToday: () => number;
   xpThisWeek: () => number;
 };
 
-export const createUserAchievementSlice: BoundStateCreator<UserAchievementSlice> = (set, get) => ({
+export const createUserAchievementSlice: BoundStateCreator<UserAchievementSlice> = (set) => ({
   userHistory: [],
   xpAllTime: 0,
 
@@ -61,8 +60,6 @@ export const createUserAchievementSlice: BoundStateCreator<UserAchievementSlice>
 
   setGems: (gems: number) => set(() => ({ gems: gems })),
   setGlobalLessonsCompleted: (globalLessonsCompleted: number) => set(() => ({ globalLessonsCompleted: globalLessonsCompleted})),
-
-  increaseXp: (by: number) => set({ userHistory: addXpToday(get().userHistory, by) }),
 
   xpToday: () => xpAt(get().userHistory, dayjs()),
 

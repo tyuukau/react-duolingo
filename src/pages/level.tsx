@@ -575,10 +575,6 @@ const LevelComplete = ({
     (x) => x.setGlobalLessonsCompleted
   );
 
-  const increaseXp = useBoundStore((x) => x.increaseXp);
-  const addToday = useBoundStore((x) => x.addToday);
-  const increaseGems = useBoundStore((x) => x.increaseGems);
-
   const course = useBoundStore((x) => x.currentCourse);
   const token = useBoundStore((x) => x.token);
   const setCourseDatas = useBoundStore((x) => x.setCourseDatas);
@@ -643,7 +639,6 @@ const LevelComplete = ({
       setUserHistory(userAchievement.userHistory);
       setActiveDays(userAchievement.userHistory);
 
-      addToday();
       if (!isPractice) {
         const courseDataData =
           await increaseLessonsCompletedMutation.mutateAsync({
