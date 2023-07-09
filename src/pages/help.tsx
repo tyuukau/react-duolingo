@@ -1,13 +1,12 @@
 import type { NextPage } from "next";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import Link from "next/link";
 import { TopBar } from "~/components/navigation/TopBar";
 import { BottomBar } from "../components/navigation/BottomBar";
 import { LeftBar } from "../components/navigation/LeftBar";
 import { useBoundStore } from "../hooks/useBoundStore";
 
-import ProfileTopBar from "./profile";
 
 const Help: NextPage = () => {
   const router = useRouter();

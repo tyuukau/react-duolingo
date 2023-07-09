@@ -1,15 +1,15 @@
 import { type NextPage } from "next";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { BottomBar } from "../components/navigation/BottomBar";
 import { LeftBar } from "../components/navigation/LeftBar";
 import { RightBar } from "../components/navigation/RightBar";
 import { TopBar } from "../components/navigation/TopBar";
 import { useBoundStore } from "../hooks/useBoundStore";
 
-import { useQuery, useMutation } from "react-query";
-import DefaultSpinner from "~/components/Spinner";
+import { useQuery } from "react-query";
 import CourseCard from "~/components/CourseCard";
+import DefaultSpinner from "~/components/Spinner";
 
 
 const Course: NextPage = () => {

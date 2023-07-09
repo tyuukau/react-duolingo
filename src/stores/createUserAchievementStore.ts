@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
 import type { BoundStateCreator } from "../hooks/useBoundStore";
+import { range, sum } from "../utils/array-utils";
 import type { DateString } from "../utils/dateString";
 import { toDateString } from "../utils/dateString";
-import { range, sum } from "../utils/array-utils";
 
 export type XpByDate = {
   date: DateString;
@@ -48,7 +48,7 @@ export type UserAchievementSlice = {
   xpThisWeek: () => number;
 };
 
-export const createUserAchievementSlice: BoundStateCreator<UserAchievementSlice> = (set) => ({
+export const createUserAchievementSlice: BoundStateCreator<UserAchievementSlice> = (set, get) => ({
   userHistory: [],
   xpAllTime: 0,
 

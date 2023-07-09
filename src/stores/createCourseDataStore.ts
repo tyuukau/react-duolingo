@@ -1,7 +1,4 @@
 import type { BoundStateCreator } from "../hooks/useBoundStore";
-import type { Course } from "./createCourseStore";
-
-import { immer } from "zustand/middleware/immer";
 
 export type Level = {
   lessonNumber: number;

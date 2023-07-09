@@ -1,23 +1,20 @@
 import type { NextPage } from "next";
-import { TopBar } from "../components/navigation/TopBar";
-import { BottomBar } from "../components/navigation/BottomBar";
-import { LeftBar } from "../components/navigation/LeftBar";
+import Link from "next/link";
 import {
-  BronzeLeagueSvg,
-  EditPencilSvg,
   EmptyFireSvg,
   FireSvg,
   LightningProgressSvg,
-  EmptyMedalSvg,
   ProfileFriendsSvg,
   ProfileTimeJoinedSvg,
-  SettingsGearSvg,
+  SettingsGearSvg
 } from "../components/Svgs";
-import Link from "next/link";
+import { BottomBar } from "../components/navigation/BottomBar";
+import { LeftBar } from "../components/navigation/LeftBar";
+import { TopBar } from "../components/navigation/TopBar";
 
-import { useBoundStore } from "../hooks/useBoundStore";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useBoundStore } from "../hooks/useBoundStore";
 
 export const ProfileTopBar = () => {
   return (

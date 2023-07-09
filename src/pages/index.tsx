@@ -1,10 +1,10 @@
 import { type NextPage } from "next";
 import type { StaticImageData } from "next/image";
 import _bgSnow from "../../public/bg-snow.svg";
-import { FluenciaHeader } from "../components/FluenciaHeader";
-import { LoginScreen, useLoginScreen } from "../components/screens/LoginScreen";
-import { GlobeSvg } from "../components/Svgs";
 import _globe from "../../public/svgs/globe.svg";
+import { FluenciaHeader } from "../components/FluenciaHeader";
+import { GlobeSvg } from "../components/Svgs";
+import { LoginScreen, useLoginScreen } from "../components/screens/LoginScreen";
 
 const bgSnow = _bgSnow as StaticImageData;
 const globe = _globe as StaticImageData;

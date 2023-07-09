@@ -2,7 +2,9 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
+import Spritesheet from "react-responsive-spritesheet";
+import type { LevelProblem } from "~/stores/createLevelStore";
 import { generateFragments } from "~/utils/array-utils";
 import { formatTime } from "~/utils/dateString";
 import {
@@ -15,9 +17,6 @@ import {
   PlaySvg,
 } from "../components/Svgs";
 import { useBoundStore } from "../hooks/useBoundStore";
-import Spritesheet from "react-responsive-spritesheet";
-import { playSound } from "~/components/Sound";
-import type { LevelProblem } from "~/stores/createLevelStore";
 
 const MonsterBar = ({
   correctAnswerCount,

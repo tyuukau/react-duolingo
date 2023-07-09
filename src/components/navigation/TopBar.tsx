@@ -1,20 +1,15 @@
 import dayjs from "dayjs";
 import Link from "next/link";
-import type { ComponentProps } from "react";
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useBoundStore } from "../../hooks/useBoundStore";
 import { Calendar } from "../Calendar";
-import { Flag } from "../Flag";
 import {
-  FireSvg,
-  GemSvg,
-  GlobeIconSvg,
-  GemsTreasureChestSvg,
-  MoreOptionsSvg,
-  PodcastIconSvg,
+  AddLanguageSvg,
   EmptyFireTopBarSvg,
   EmptyGemTopBarSvg,
-  AddLanguageSvg,
+  FireSvg,
+  GemSvg,
+  GemsTreasureChestSvg
 } from "../Svgs";
 
 type MenuState = "HIDDEN" | "LANGUAGES" | "STREAK" | "GEMS" | "MORE";

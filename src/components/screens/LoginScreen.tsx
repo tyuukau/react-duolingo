@@ -1,16 +1,13 @@
 import Link from "next/link";
-import { CloseSvg } from "../Svgs";
-import type { ComponentProps } from "react";
-import React, { useEffect, useRef, useState } from "react";
-import { useBoundStore } from "../../hooks/useBoundStore";
 import { useRouter } from "next/router";
-import { FacebookLogoSvg, GoogleLogoSvg } from "../Svgs";
+import React, { useEffect, useState } from "react";
+import { useBoundStore } from "../../hooks/useBoundStore";
+import { CloseSvg, FacebookLogoSvg, GoogleLogoSvg } from "../Svgs";
 
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 
 export type LoginScreenState = "HIDDEN" | "LOGIN" | "SIGNUP";
 
-import type { Course } from "../../stores/createCourseStore";
 
 export const useLoginScreen = () => {
   const router = useRouter();

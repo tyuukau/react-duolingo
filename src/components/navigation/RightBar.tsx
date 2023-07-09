@@ -1,24 +1,22 @@
-import Link from "next/link";
-import type { ComponentProps } from "react";
-import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { useBoundStore } from "../../hooks/useBoundStore";
+import { useLeaderboardRank } from "../../hooks/useLeaderboard";
+import { Calendar } from "../Calendar";
 import {
   BronzeLeagueSvg,
   EmptyFireSvg,
   EmptyGemSvg,
   FireSvg,
   GemSvg,
-  LightningProgressSvg,
   GemsTreasureChestSvg,
-  TreasureProgressSvg,
+  LightningProgressSvg,
   TreasureClosedSvg,
+  TreasureProgressSvg,
 } from "../Svgs";
-import { Calendar } from "../Calendar";
-import { useBoundStore } from "../../hooks/useBoundStore";
-import { Flag } from "../Flag";
 import type { LoginScreenState } from "../screens/LoginScreen";
 import { LoginScreen } from "../screens/LoginScreen";
-import { useLeaderboardRank } from "../../hooks/useLeaderboard";
 
 import { useMutation } from "react-query";
 

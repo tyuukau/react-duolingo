@@ -1,9 +1,8 @@
 "use client";
 
-import { Card } from "flowbite-react";
-import { useBoundStore } from "../hooks/useBoundStore";
 import { useRouter } from "next/router";
 import { useMutation } from "react-query";
+import { useBoundStore } from "../hooks/useBoundStore";
 
 export default function CourseCard({ course }) {
   const router = useRouter();
@@ -136,18 +135,5 @@ export default function CourseCard({ course }) {
         </button>
       </div>
     </div>
-
-    // <Card
-    //   imgAlt="Meaningful alt text for an image that is not purely decorative"
-    //   imgSrc={course.headerImage}
-    // >
-    //   <h5 className="text-2xl font-bold tracking-tight text-gray-900">
-    //     <p>{course.courseName}</p>
-    //   </h5>
-    //   <div className="font-normal text-gray-700">
-    //     <p>{course.language.name}</p>
-    //     <p>{course.description}</p>
-    //   </div>
-    // </Card>
   );
 }

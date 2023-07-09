@@ -1,10 +1,8 @@
 import type { NextPage } from "next";
 import Link from "next/link";
-import type { ComponentProps } from "react";
-import React, { useState } from "react";
+import { useState } from "react";
 import type { LoginScreenState } from "../components/screens/LoginScreen";
 import { LoginScreen } from "../components/screens/LoginScreen";
-import { MenuIconSvg } from "~/components/Svgs";
 
 const ForgotPassword: NextPage = () => {
   const [loginScreenState, setLoginScreenState] =

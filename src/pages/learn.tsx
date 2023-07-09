@@ -2,26 +2,26 @@ import { type NextPage } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import { BottomBar } from "../components/navigation/BottomBar";
-import { LeftBar } from "../components/navigation/LeftBar";
-import { LoginScreen, useLoginScreen } from "../components/screens/LoginScreen";
-import { RightBar } from "../components/navigation/RightBar";
+import { useQuery } from "react-query";
+import DefaultSpinner from "~/components/Spinner";
+import type {
+  Chapter,
+  Level,
+  LevelType
+} from "~/stores/createCourseDataStore";
+import type { Course } from "~/stores/createCourseStore";
 import {
   ActiveBookSvg,
   ActiveDumbbellSvg,
   ActiveTreasureSvg,
   ActiveTrophySvg,
   CheckmarkSvg,
-  FastForwardSvg,
   GoldenBookSvg,
   GoldenDumbbellSvg,
   GoldenTreasureSvg,
   GoldenTrophySvg,
   GuidebookSvg,
   LessonCompletionSvg0,
-  LessonCompletionSvg1,
-  LessonCompletionSvg2,
-  LessonCompletionSvg3,
   LockSvg,
   LockedBookSvg,
   LockedDumbbellSvg,
@@ -29,19 +29,13 @@ import {
   LockedTrophySvg,
   PracticeExerciseSvg,
   StarSvg,
-  UpArrowSvg,
+  UpArrowSvg
 } from "../components/Svgs";
+import { BottomBar } from "../components/navigation/BottomBar";
+import { LeftBar } from "../components/navigation/LeftBar";
+import { RightBar } from "../components/navigation/RightBar";
 import { TopBar } from "../components/navigation/TopBar";
 import { useBoundStore } from "../hooks/useBoundStore";
-import type {
-  Level,
-  Chapter,
-  LevelType,
-  CourseData,
-} from "~/stores/createCourseDataStore";
-import type { Course } from "~/stores/createCourseStore";
-import { useQuery } from "react-query";
-import DefaultSpinner from "~/components/Spinner";
 
 type LevelStatus = "LOCKED" | "ACTIVE" | "COMPLETE";
 
@@ -231,7 +225,8 @@ const LevelTooltip = ({
     };
 
     window.addEventListener("click", containsLevelTooltip, true);
-    return () => window.removeEventListener("click", containsLevelTooltip, true);
+    return () =>
+      window.removeEventListener("click", containsLevelTooltip, true);
   }, [selectedLevel, levelTooltipRef, closeTooltip, index]);
 
   const chapter = chapters.find(
@@ -270,20 +265,20 @@ const LevelTooltip = ({
     setCurrentLevel(level);
 
     const levelProblems = await fetchProblems();
-    setCurrentLevelContent(levelProblems);    
+    setCurrentLevelContent(levelProblems);
 
     void router.push("/level");
-  }
+  };
 
   const practiceLevelHandler = async (e) => {
     e.preventDefault;
     setCurrentLevel(level);
 
     const levelProblems = await fetchProblems();
-    setCurrentLevelContent(levelProblems);    
+    setCurrentLevelContent(levelProblems);
 
     void router.push("/level?practice");
-  }
+  };
 
   return (
     <div
@@ -399,7 +394,7 @@ const ChapterSection = ({
           const status = levelStatus(
             currentCourseContent,
             level,
-            lessonsCompleted,
+            lessonsCompleted
           );
           return (
             <Fragment key={i}>
@@ -528,18 +523,6 @@ const LessonCompletionSvg = ({
     return null;
   }
   return <LessonCompletionSvg0 style={style} />;
-  // switch (lessonsCompleted % 4) {
-  //   case 0:
-  //     return <LessonCompletionSvg0 style={style} />;
-  //   case 1:
-  //     return <LessonCompletionSvg1 style={style} />;
-  //   case 2:
-  //     return <LessonCompletionSvg2 style={style} />;
-  //   case 3:
-  //     return <LessonCompletionSvg3 style={style} />;
-  //   default:
-  //     return null;
-  // }
 };
 
 const HoverLabel = ({
@@ -617,6 +600,15 @@ const ChapterHeader = ({
 ////////////////////
 
 const Learn: NextPage = () => {
+  const loggedIn = useBoundStore((x) => x.loggedIn);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loggedIn) {
+      void router.push("/");
+    }
+  }, [loggedIn, router]);
+
   const [scrollY, setScrollY] = useState(0);
   useEffect(() => {
     const updateScrollY = () => setScrollY(globalThis.scrollY ?? scrollY);
@@ -632,9 +624,10 @@ const Learn: NextPage = () => {
   const setCurrentCourseContent = useBoundStore(
     (x) => x.setCurrentCourseContent
   );
-  const courseDatas = useBoundStore((x) => x.courseDatas)
-  const lessonsCompleted = courseDatas.find((data) => data.courseID === currentCourse.id)
-    ?.lessonsCompleted || 0;
+  const courseDatas = useBoundStore((x) => x.courseDatas);
+  const lessonsCompleted =
+    courseDatas.find((data) => data.courseID === currentCourse.id)
+      ?.lessonsCompleted || 0;
 
   const fetchChaptersAndLessons = async () => {
     const id = currentCourse.id;

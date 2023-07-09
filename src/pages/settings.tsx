@@ -1,15 +1,14 @@
 import type { NextPage } from "next";
-import React, { useState, useEffect } from "react";
-import type { ComponentProps } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { CoachSvg } from "~/components/Svgs";
 import { BottomBar } from "../components/navigation/BottomBar";
 import { LeftBar } from "../components/navigation/LeftBar";
 import { TopBar } from "../components/navigation/TopBar";
 import { useBoundStore } from "../hooks/useBoundStore";
-import { useRouter } from "next/router";
-import { CoachSvg } from "~/components/Svgs";
 
-import { useQuery, useMutation } from "react-query";
+import { useMutation } from "react-query";
 
 const Settings: NextPage = () => {
   const name = useBoundStore((x) => x.name);

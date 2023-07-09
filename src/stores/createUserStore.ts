@@ -1,13 +1,6 @@
 import dayjs from "dayjs";
 import type { BoundStateCreator } from "../hooks/useBoundStore";
 
-// Required features:
-// User:
-// - Login, logout
-// - Register
-// - View Profile
-// - Update Profile
-
 export type UserSlice = {
   // General
   name: string;

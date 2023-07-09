@@ -3,7 +3,6 @@ import Head from "next/head";
 import React from "react";
 
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 
 import "~/styles/globals.css";
 
@@ -19,7 +18,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           <link rel="icon" href="../../public/favicon.ico" />
         </Head>
         <Component {...pageProps} />
-        {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       </>
     </QueryClientProvider>
   );

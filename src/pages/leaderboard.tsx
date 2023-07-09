@@ -1,24 +1,22 @@
+import dayjs from "dayjs";
 import type { NextPage } from "next";
-import React, { useEffect } from "react";
-import { LeftBar } from "../components/navigation/LeftBar";
-import { TopBar } from "~/components/navigation/TopBar";
-import { BottomBar } from "../components/navigation/BottomBar";
-import { useBoundStore } from "../hooks/useBoundStore";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { TopBar } from "~/components/navigation/TopBar";
 import {
   BronzeLeagueSvg,
   FirstPlaceSvg,
   LeaderboardBannerSvg,
   LeaderboardExplanationSvg,
   LockedLeaderboardSvg,
-  LockedLeagueSvg,
   SecondPlaceSvg,
-  ThirdPlaceSvg,
+  ThirdPlaceSvg
 } from "../components/Svgs";
-import dayjs from "dayjs";
-import { useRouter } from "next/router";
+import { BottomBar } from "../components/navigation/BottomBar";
+import { LeftBar } from "../components/navigation/LeftBar";
+import { useBoundStore } from "../hooks/useBoundStore";
 import { useLeaderboardUsers } from "../hooks/useLeaderboard";
-import Image from "next/image";
 
 const LeaderboardExplanationSection = () => {
   return (

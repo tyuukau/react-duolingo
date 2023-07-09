@@ -1,15 +1,14 @@
 import type { NextPage } from "next";
-import type { ComponentProps } from "react";
-import React, { useEffect } from "react";
-import { useBoundStore } from "../hooks/useBoundStore";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { useBoundStore } from "../hooks/useBoundStore";
 
 import { BottomBar } from "../components/navigation/BottomBar";
 import { LeftBar } from "../components/navigation/LeftBar";
 import { RightBar } from "../components/navigation/RightBar";
 import { TopBar } from "../components/navigation/TopBar";
 
-import { StreakFreezeSvg, EmptyGemSvg, DoubleOrNothingSvg } from "~/components/Svgs";
+import { DoubleOrNothingSvg, EmptyGemSvg, StreakFreezeSvg } from "~/components/Svgs";
 
 const Shop: NextPage = () => {
   const streakFreezes = 0;

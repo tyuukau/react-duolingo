@@ -1,14 +1,14 @@
 import type { NextPage } from "next";
 import Link from "next/link";
 // import languages from "../utils/fakeDatas/fakeLanguages";
+import type { StaticImageData } from "next/image";
+import _bgSnow from "../../public/bg-snow.svg";
 import { FluenciaHeader } from "../components/FluenciaHeader";
 import { useBoundStore } from "../hooks/useBoundStore";
-import _bgSnow from "../../public/bg-snow.svg";
-import type { StaticImageData } from "next/image";
 
 import DefaultSpinner from "../components/Spinner";
 
-import { useQuery, useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 
 const bgSnow = _bgSnow as StaticImageData;
 
