@@ -40,9 +40,7 @@ export type CourseDataSlice = {
   setCourseDatas: (courseDatas: CourseData[]) => void;
 };
 
-export const createCourseDataSlice: BoundStateCreator<CourseDataSlice> = (
-  set
-) => ({
+export const createCourseDataSlice: BoundStateCreator<CourseDataSlice> = (set) => ({
   courseDatas: {},
 
   setCourseDatas: (courseDatas: CourseData[]) =>

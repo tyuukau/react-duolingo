@@ -641,7 +641,7 @@ const LevelComplete = ({
       });
       setXpAllTime(userAchievement.xpAllTime);
       setUserHistory(userAchievement.userHistory);
-      setActiveDays(userAchievement.activeDays);
+      setActiveDays(userAchievement.userHistory);
 
       addToday();
       if (!isPractice) {
