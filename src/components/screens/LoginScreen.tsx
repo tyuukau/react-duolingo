@@ -8,7 +8,6 @@ import { useMutation } from "react-query";
 
 export type LoginScreenState = "HIDDEN" | "LOGIN" | "SIGNUP";
 
-
 export const useLoginScreen = () => {
   const router = useRouter();
   const loggedIn = useBoundStore((x) => x.loggedIn);
@@ -42,7 +41,9 @@ export const LoginScreen = ({
   const setUserHistory = useBoundStore((x) => x.setUserHistory);
   const setXpAllTime = useBoundStore((x) => x.setXpAllTime);
   const setGems = useBoundStore((x) => x.setGems);
-  const setGlobalLessonsCompleted = useBoundStore((x) => x.setGlobalLessonsCompleted);
+  const setGlobalLessonsCompleted = useBoundStore(
+    (x) => x.setGlobalLessonsCompleted
+  );
   const setActiveDays = useBoundStore((x) => x.setActiveDays);
 
   const token = useBoundStore((x) => x.token);
@@ -209,7 +210,7 @@ export const LoginScreen = ({
       setCurrentCourse(courseProfileData.current_course);
 
       const courseDatas = await fetchCourseDatas(data.token);
-      setCourseDatas(courseDatas);    
+      setCourseDatas(courseDatas);
 
       const userAchievement = await fetchUserAchievement(data.token);
       setUserHistory(userAchievement.userHistory);
@@ -271,25 +272,30 @@ export const LoginScreen = ({
           <span className="sr-only">Close</span>
         </button>
         <button
-          className="hidden rounded-2xl border-2 border-b-4 border-gray-200 px-4 py-3 text-sm font-bold uppercase text-blue-400 transition hover:bg-gray-50 hover:brightness-90 sm:block"
+          className="group relative px-10 py-3"
           onClick={() =>
             setLoginScreenState((x) => (x === "LOGIN" ? "SIGNUP" : "LOGIN"))
           }
         >
-          {loginScreenState === "LOGIN" ? "Sign up" : "Login"}
+          <span className="absolute inset-0 h-full w-full translate-x-1 translate-y-1 transform border-gray-200 bg-gray-200"></span>
+          <span className="absolute inset-0 h-full w-full border-2 border-gray-200 bg-gray-50 transition group-hover:hover:bg-white"></span>
+          <span className="relative text-sm font-bold uppercase text-blue-400">
+            {" "}
+            {loginScreenState === "LOGIN" ? "Sign up" : "Login"}
+          </span>
         </button>
       </header>
       <div className="flex grow items-center justify-center">
         <div className="flex w-full flex-col gap-5 sm:w-96">
           <h2 className="text-center text-2xl font-bold text-gray-800">
-            {loginScreenState === "LOGIN" ? "Log in" : "Create your profile"}
+            {loginScreenState === "LOGIN" ? "Sign in" : "Create your profile"}
           </h2>
           <div className="flex flex-col gap-2 text-black">
             {loginScreenState === "SIGNUP" && (
               <>
                 <div className="relative flex grow">
                   <input
-                    className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
+                    className="grow border-2 border-gray-200 bg-gray-50 px-4 py-3"
                     placeholder="Age"
                     value={localAge}
                     onChange={(e) => setLocalAge(e.target.value)}
@@ -306,7 +312,7 @@ export const LoginScreen = ({
                     >
                       ?
                       {ageTooltipShown && (
-                        <div className="absolute -right-5 top-full z-10 w-72 rounded-2xl border-2 border-gray-200 bg-white p-4 text-center text-xs leading-5 text-gray-800">
+                        <div className="absolute -right-5 top-full z-10 w-72 border-2 border-gray-200 bg-white p-4 text-center text-xs leading-5 text-gray-800">
                           Providing your age ensures you get the right Fluencia
                           experience.
                         </div>
@@ -315,7 +321,7 @@ export const LoginScreen = ({
                   </div>
                 </div>
                 <input
-                  className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
+                  className="grow border-2 border-gray-200 bg-gray-50 px-4 py-3"
                   placeholder="Name"
                   value={localName}
                   onChange={(e) => setLocalName(e.target.value)}
@@ -323,14 +329,14 @@ export const LoginScreen = ({
               </>
             )}
             <input
-              className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
+              className="grow border-2 border-gray-200 bg-gray-50 px-4 py-3"
               placeholder="Email"
               value={localEmail}
               onChange={(e) => setLocalEmail(e.target.value)}
             />
             <div className="relative flex grow">
               <input
-                className="grow rounded-2xl border-2 border-gray-200 bg-gray-50 px-4 py-3"
+                className="grow border-2 border-gray-200 bg-gray-50 px-4 py-3"
                 placeholder="Password"
                 type="password"
                 value={localPassword}
@@ -348,14 +354,21 @@ export const LoginScreen = ({
               )}
             </div>
           </div>
+
           <button
-            className="rounded-2xl border-b-4 border-blue-500 bg-blue-400 py-3 font-bold uppercase text-white transition hover:brightness-110"
+            className="group relative px-10 py-3"
             onClick={
               loginScreenState === "LOGIN" ? signInHandler : signUpHandler
             }
           >
-            {loginScreenState === "LOGIN" ? "Log in" : "Create account"}
+            <span className="absolute inset-0 h-full w-full translate-x-1 translate-y-1 transform border-blue-500 bg-blue-500"></span>
+            <span className="absolute inset-0 h-full w-full border-2 border-blue-500 bg-blue-400 transition group-hover:hover:bg-blue-300"></span>
+            <span className="relative font-bold uppercase group-hover:text-blue-100">
+              {" "}
+              {loginScreenState === "LOGIN" ? "Sign in" : "Get started"}
+            </span>
           </button>
+
           <div className="flex items-center gap-2">
             <div className="h-[2px] grow bg-gray-300"></div>
             <span className="font-bold uppercase text-gray-400">or</span>
@@ -363,38 +376,26 @@ export const LoginScreen = ({
           </div>
           <div className="flex gap-5">
             <button
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-b-4 border-gray-200 py-3 font-bold text-blue-900 transition hover:bg-gray-50 hover:brightness-90"
+              className="group relative px-10 py-3 w-full"
               onClick={signInHandler}
             >
-              <FacebookLogoSvg className="h-5 w-5" /> Facebook
+              <span className="absolute inset-0 h-full w-full translate-x-1 translate-y-1 transform border-gray-200 bg-gray-200"></span>
+              <span className="absolute inset-0 h-full w-full border-2 border-gray-200 bg-gray-50 transition group-hover:hover:bg-white"></span>
+              <span className="relative flex gap-2 font-bold text-blue-900 items-center justify-center">
+                <FacebookLogoSvg className="h-5 w-5" /> Facebook
+              </span>
             </button>
             <button
-              className="flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-b-4 border-gray-200 py-3 font-bold text-blue-600 transition hover:bg-gray-50 hover:brightness-90"
+              className="group relative px-10 py-3 w-full"
               onClick={signInHandler}
             >
-              <GoogleLogoSvg className="h-5 w-5" /> Google
+              <span className="absolute inset-0 h-full w-full translate-x-1 translate-y-1 transform border-gray-200 bg-gray-200"></span>
+              <span className="absolute inset-0 h-full w-full border-2 border-gray-200 bg-gray-50 transition group-hover:hover:bg-white"></span>
+              <span className="relative flex gap-2 font-bold text-blue-600">
+                <GoogleLogoSvg className="h-5 w-5" /> Google
+              </span>
             </button>
           </div>
-          {/* <p className="text-center text-xs leading-5 text-gray-400">
-            By signing in to Fluencia, you agree to our Terms and Privacy.
-          </p> */}
-          {/* <p className="text-center text-xs leading-5 text-gray-400">
-            This site is protected by reCAPTCHA Enterprise and the Google{" "}
-            <Link
-              className="font-bold"
-              href="https://policies.google.com/privacy"
-            >
-              Privacy Policy
-            </Link>{" "}
-            and{" "}
-            <Link
-              className="font-bold"
-              href="https://policies.google.com/terms"
-            >
-              Terms of Service
-            </Link>{" "}
-            apply.
-          </p> */}
           <p className="block text-center sm:hidden">
             <span className="text-sm font-bold text-gray-700">
               {loginScreenState === "LOGIN"

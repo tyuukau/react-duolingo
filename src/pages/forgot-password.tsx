@@ -29,31 +29,6 @@ const ForgotPassword: NextPage = () => {
               Get started
             </Link>
           </div>
-          {/* <div
-            className="relative flex md:hidden"
-            onClick={() => setMobileMenuShown((x) => !x)}
-            role="button"
-            tabIndex={0}
-          >
-            <MenuIconSvg aria-hidden="true" />
-            Go Back
-            {mobileMenuShown && (
-              <div className="absolute top-full right-0 rounded-2xl border-2 border-gray-300 bg-white font-bold text-gray-700">
-                <Link
-                  className="block min-w-max cursor-pointer rounded-t-2xl px-5 py-2 hover:bg-gray-100"
-                  href="/?login"
-                >
-                  Sign in
-                </Link>
-                <Link
-                  className="block min-w-max cursor-pointer border-t-2 border-gray-300 px-5 py-2 hover:bg-gray-100"
-                  href="/register"
-                >
-                  Get started
-                </Link>
-              </div>
-            )}
-          </div> */}
         </div>
       </header>
       <div className="flex w-full grow flex-col items-center gap-5 px-5 pt-5 sm:w-96 sm:pt-52">

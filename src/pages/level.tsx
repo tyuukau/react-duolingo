@@ -17,6 +17,7 @@ import {
   PlaySvg,
 } from "../components/Svgs";
 import { useBoundStore } from "../hooks/useBoundStore";
+import { playSound } from "../components/Sound";
 
 const MonsterBar = ({
   correctAnswerCount,
@@ -924,8 +925,8 @@ const Level: NextPage = () => {
   const isAnswerCorrect =
     correctAnswer === selectedAnswers.map((i) => answers[i]).join("");
 
-  // const playSuccessSound = playSound("success");
-  // const playFailSound = playSound("fail");
+  const playSuccessSound = playSound("success");
+  const playFailSound = playSound("fail");
 
   const [isIdle, setIsIdle] = useState(true);
   const [isHurt, setIsHurt] = useState(false);
@@ -945,14 +946,14 @@ const Level: NextPage = () => {
         setIsHurt(true);
       }
       if (soundEffects) {
-        // playSuccessSound();
+        playSuccessSound();
       }
     } else {
       setIncorrectAnswerCount((x) => x + 1);
 
       setIsAttack(true);
       if (soundEffects) {
-        // playFailSound();
+        playFailSound();
       }
     }
     setQuestionResults((questionResults) => [

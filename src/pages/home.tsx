@@ -12,7 +12,7 @@ import CourseCard from "~/components/CourseCard";
 import DefaultSpinner from "~/components/Spinner";
 
 
-const Course: NextPage = () => {
+const Home: NextPage = () => {
   const router = useRouter();
   const loggedIn = useBoundStore((x) => x.loggedIn);
   const language = useBoundStore((x) => x.currentLanguage);
@@ -74,4 +74,4 @@ const Course: NextPage = () => {
   );
 };
 
-export default Course;
+export default Home;
